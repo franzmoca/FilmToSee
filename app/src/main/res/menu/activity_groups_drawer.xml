@@ -3,22 +3,28 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_camera"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="Import" />
-        <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="Gallery" />
-        <item
-            android:id="@+id/nav_slideshow"
+            android:id="@+id/new_group"
             android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow" />
+            android:title="Create new group" />
         <item
-            android:id="@+id/nav_manage"
+            android:id="@+id/invite_friend"
+            android:icon="@drawable/ic_menu_send"
+            android:title="Invite Friend " />
+        <item
+            android:id="@+id/settings"
             android:icon="@drawable/ic_menu_manage"
-            android:title="Tools" />
+            android:title="Settings" />
+        <item
+            android:id="@+id/faq"
+            android:icon="@drawable/ic_menu_share"
+            android:title="Faq" />
+        <item
+            android:id="@+id/logout"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="Logout" />
+
     </group>
+<!--
 
     <item android:title="Communicate">
         <menu>
@@ -32,5 +38,6 @@
                 android:title="Send" />
         </menu>
     </item>
+-->
 
 </menu>

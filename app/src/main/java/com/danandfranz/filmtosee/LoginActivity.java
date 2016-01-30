@@ -20,6 +20,8 @@ public class LoginActivity extends AppCompatActivity  {
 
     private static final String TAG = "LoginActivity";
     private static final int REQUEST_SIGNUP = 0;
+    // Session Manager Class
+    SessionManager session;
 
     // UI references.
     private EditText mEmailView;
@@ -30,11 +32,13 @@ public class LoginActivity extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        session = new SessionManager(getApplicationContext());
         // Set up the login form.
         mEmailView = (EditText) findViewById(R.id.input_email);
         mPasswordView = (EditText) findViewById(R.id.input_password);
         signInButton = (Button) findViewById(R.id.btn_login);
         signUpLink = (TextView)findViewById(R.id.link_signup);
+        Toast.makeText(getApplicationContext(), "User Login Status: " + session.isLoggedIn(), Toast.LENGTH_LONG).show();
 
         signInButton.setOnClickListener(new View.OnClickListener() {
 
@@ -71,8 +75,8 @@ public class LoginActivity extends AppCompatActivity  {
         progressDialog.setMessage("Authenticating...");
         progressDialog.show();
 
-        String email = mEmailView.getText().toString();
-        String password = mPasswordView.getText().toString();
+        final String email = mEmailView.getText().toString();
+        final String password = mPasswordView.getText().toString();
 
         // TODO: Implement your own authentication logic here.
 
@@ -80,8 +84,12 @@ public class LoginActivity extends AppCompatActivity  {
                 new Runnable() {
                     public void run() {
                         // On complete call either onLoginSuccess or onLoginFailed
-                        onLoginSuccess();
-                        // onLoginFailed();
+                        if(email.equals("test@test.it")&password.equals("123456")){
+                            onLoginSuccess();
+                        }
+                        else {
+                            onLoginFailed();
+                        }
                         progressDialog.dismiss();
                     }
                 }, 3000);
@@ -106,6 +114,7 @@ public class LoginActivity extends AppCompatActivity  {
 
     public void onLoginSuccess() {
         signInButton.setEnabled(true);
+        session.createLoginSession("FilmToSee", mEmailView.getText().toString());
 
         Intent intent = new Intent(getApplicationContext(), GroupsActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); //makes sure that you cannot go back to the previous activity with the BACK button.
