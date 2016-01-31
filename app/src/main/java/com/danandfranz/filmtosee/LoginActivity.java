@@ -2,6 +2,7 @@ package com.danandfranz.filmtosee;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +26,7 @@ public class LoginActivity extends AppCompatActivity  {
     SessionManager session;
 
     // UI references.
+    private ScrollView rootlayout;
     private EditText mEmailView;
     private EditText mPasswordView;
     private Button signInButton;
@@ -123,7 +126,16 @@ public class LoginActivity extends AppCompatActivity  {
     }
 
     public void onLoginFailed() {
-        Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
+        rootlayout = (ScrollView) findViewById(R.id.rootlayout);
+
+        Snackbar.make(rootlayout, "Login failed!", Snackbar.LENGTH_SHORT)
+                .setAction("Undo", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // Perform anything for the action selected
+                    }
+                }).setDuration(Snackbar.LENGTH_SHORT).show();
+
 
         signInButton.setEnabled(true);
     }
