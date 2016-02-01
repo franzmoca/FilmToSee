@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -87,7 +88,7 @@ public class LoginActivity extends AppCompatActivity  {
                 new Runnable() {
                     public void run() {
                         // On complete call either onLoginSuccess or onLoginFailed
-                        if(email.equals("test@test.it")&password.equals("123456")){
+                        if(email.equals("test@test.it")&&password.equals("123456")){
                             onLoginSuccess();
                         }
                         else {
