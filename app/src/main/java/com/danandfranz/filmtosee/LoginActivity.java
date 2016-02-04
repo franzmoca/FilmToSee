@@ -118,7 +118,7 @@ public class LoginActivity extends AppCompatActivity  {
 
     public void onLoginSuccess() {
         signInButton.setEnabled(true);
-        session.createLoginSession("FilmToSee", mEmailView.getText().toString());
+        session.createLoginSession("Franz", mEmailView.getText().toString());
 
         Intent intent = new Intent(getApplicationContext(), GroupsActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); //makes sure that you cannot go back to the previous activity with the BACK button.
