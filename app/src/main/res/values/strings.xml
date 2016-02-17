@@ -24,5 +24,6 @@
         in no small part due to the introduction of material design,
         a new design language that refreshed the entire Android experience
     </string>
+    <string name="title_activity_inside_group">InsideGroupActivity</string>
 
 </resources>

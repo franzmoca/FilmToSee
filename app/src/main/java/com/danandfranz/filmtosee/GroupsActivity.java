@@ -1,5 +1,6 @@
 package com.danandfranz.filmtosee;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -146,6 +147,8 @@ public class GroupsActivity extends AppCompatActivity
         } else if (id == R.id.invite_friend) {
 
         } else if (id == R.id.settings) {
+            Intent intent = new Intent(this, InsideGroupActivity.class);
+            startActivity(intent);
 
         } else if (id == R.id.faq) {
 
