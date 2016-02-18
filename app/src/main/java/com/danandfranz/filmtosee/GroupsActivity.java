@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,7 +23,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+
+import it.gmariotti.cardslib.library.internal.Card;
+import it.gmariotti.cardslib.library.internal.CardHeader;
+import it.gmariotti.cardslib.library.recyclerview.internal.CardArrayRecyclerViewAdapter;
+import it.gmariotti.cardslib.library.recyclerview.view.CardRecyclerView;
 
 public class GroupsActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -53,8 +60,11 @@ public class GroupsActivity extends AppCompatActivity
         String email = user.get(SessionManager.KEY_EMAIL);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         Log.d(TAG, "Name " + name + " Email " + email);
-        setAvatar(name, email);
+        try {
+            setAvatar(name, email);
+        }catch (Exception e){
 
+        }
         // FINE LOGIN: Alla fine del login sostituisco avatar e stringhe
         setSupportActionBar(toolbar);
 
@@ -71,9 +81,31 @@ public class GroupsActivity extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
+        //CARTE
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        ArrayList<Card> cards = new ArrayList<Card>();
+
+        //Create a Card
+        Card card = new Card(this);
+        //Create a CardHeader
+        CardHeader header = new CardHeader(this);
+        header.setTitle("CineForum");
+        //Add Header to card
+        card.addCardHeader(header);
+
+        cards.add(card);
+
+        CardArrayRecyclerViewAdapter mCardArrayAdapter = new CardArrayRecyclerViewAdapter(this, cards);
+
+        //Staggered grid view
+        CardRecyclerView mRecyclerView = (CardRecyclerView) this.findViewById(R.id.carddemo_recyclerview);
+        mRecyclerView.setHasFixedSize(false);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        //Set the empty view
+        if (mRecyclerView != null) {
+            mRecyclerView.setAdapter(mCardArrayAdapter);
+        }
     }
 
     private void setAvatar(String name, String email) {
@@ -97,6 +129,8 @@ public class GroupsActivity extends AppCompatActivity
             final RoundedAvatarDrawable letterTile = tileProvider.getCircleLetterTile(name, "key", tileSize, tileSize);
             avatar.setImageDrawable(letterTile);
         }
+        //Aggiunge CARTE
+
     }
 
     private boolean avatarPresent() {

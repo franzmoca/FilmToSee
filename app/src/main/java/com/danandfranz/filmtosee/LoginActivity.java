@@ -15,6 +15,16 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonObjectRequest;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+
 /**
  * A login screen that offers login via email/password.
  */
@@ -32,23 +42,29 @@ public class LoginActivity extends AppCompatActivity  {
     private EditText mPasswordView;
     private Button signInButton;
     private TextView signUpLink;
+    DbAPI api;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        api = new DbAPI(this);
         session = new SessionManager(getApplicationContext());
         // Set up the login form.
         mEmailView = (EditText) findViewById(R.id.input_email);
         mPasswordView = (EditText) findViewById(R.id.input_password);
         signInButton = (Button) findViewById(R.id.btn_login);
         signUpLink = (TextView)findViewById(R.id.link_signup);
-        Toast.makeText(getApplicationContext(), "User Login Status: " + session.isLoggedIn(), Toast.LENGTH_LONG).show();
+        Log.d(TAG, "User Login Status: " + session.isLoggedIn());
 
         signInButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                login();
+                try {
+                    login();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         });
         signUpLink.setOnClickListener(new View.OnClickListener() {
@@ -63,7 +79,7 @@ public class LoginActivity extends AppCompatActivity  {
 
     }
 
-    private void login() {
+    private void login() throws JSONException {
         Log.d(TAG, "Login");
 
         if (!validate()) {
@@ -83,15 +99,15 @@ public class LoginActivity extends AppCompatActivity  {
         final String password = mPasswordView.getText().toString();
 
         // TODO: Implement your own authentication logic here.
+        //api.login(email, password);
 
         new android.os.Handler().postDelayed(
                 new Runnable() {
                     public void run() {
                         // On complete call either onLoginSuccess or onLoginFailed
-                        if(email.equals("test@test.it")&&password.equals("123456")){
+                        if (email.equals("test@test.it") && password.equals("123456")) {
                             onLoginSuccess();
-                        }
-                        else {
+                        } else {
                             onLoginFailed();
                         }
                         progressDialog.dismiss();
@@ -163,5 +179,36 @@ public class LoginActivity extends AppCompatActivity  {
 
         return valid;
     }
+
+/*
+    public void login(String mail,String pwd) throws JSONException{
+// Post params to be sent to the server
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("get","login");
+        params.put("email", mail);
+        params.put("password", pwd); //TODO
+
+
+        JsonObjectRequest req = new JsonObjectRequest(DbAPI.URL, new JSONObject(params),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            VolleyLog.v("Response:%n %s", response.toString(4));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                VolleyLog.e("Error: ", error.toString());
+            }
+        });
+
+// add the request object to the queue to be executed
+        mRequestQueue.add(req);
+    }*/
 }
 
