@@ -1,5 +1,6 @@
 package com.danandfranz.filmtosee;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -7,6 +8,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.util.ArrayList;
 
@@ -18,6 +25,11 @@ public class InsideGroupActivity extends AppCompatActivity {
     private FeatureCoverFlow coverFlow;
     private CoverFlowAdapter adapter;
     private ArrayList<Game> games;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +43,8 @@ public class InsideGroupActivity extends AppCompatActivity {
         adapter = new CoverFlowAdapter(this, games);
         coverFlow.setAdapter(adapter);
         coverFlow.setOnScrollPositionListener(onScrollListener());
+
+
     }
 
     private FeatureCoverFlow.OnScrollPositionListener onScrollListener() {
@@ -60,5 +74,24 @@ public class InsideGroupActivity extends AppCompatActivity {
         games.add(new Game(R.mipmap.tomb_raider, "Tom raider 3"));
         games.add(new Game(R.mipmap.need_for_speed_most_wanted, "Need for Speed Most Wanted"));
     }
+
+   public void showDetailes(View v) {
+        RelativeLayout r = (RelativeLayout) findViewById(R.id.layoutDetailes);
+       RelativeLayout y = (RelativeLayout) findViewById(R.id.layoutComments);
+
+        y.setVisibility(View.INVISIBLE);
+        r.setVisibility(View.VISIBLE);
+
+    }
+
+   public void showComments(View v) {
+       RelativeLayout r = (RelativeLayout) findViewById(R.id.layoutDetailes);
+       RelativeLayout y = (RelativeLayout) findViewById(R.id.layoutComments);
+
+        r.setVisibility(View.INVISIBLE);
+        y.setVisibility(View.VISIBLE);
+
+    }
+
 }
 

@@ -26,4 +26,8 @@
     </string>
     <string name="title_activity_inside_group">InsideGroupActivity</string>
 
+
+    <!-- Strings related to inside Group -->
+    <string name="btnDetailes">Movie Detailes</string>
+    <string name="btnComments">Comments</string>
 </resources>
