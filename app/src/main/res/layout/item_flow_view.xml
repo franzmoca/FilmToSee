@@ -18,7 +18,13 @@
         android:layout_gravity="bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+
         android:gravity="center"
-        android:textAppearance="?android:attr/textAppearanceSmallInverse" />
+        android:textAppearance="?android:attr/textAppearanceSmallInverse"
+        android:textColorHighlight="#000000"
+        android:textColor="#ffffff"
+        android:textSize="10dp"
+        android:textStyle="bold"
+        android:fontFamily="@string/card_font_fontFamily_image_text_over" />
 
 </FrameLayout>

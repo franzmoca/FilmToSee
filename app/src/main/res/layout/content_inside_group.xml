@@ -17,6 +17,7 @@
         android:layout_gravity="fill_vertical"
         android:id="@+id/relativeLayout">
 
+        <!-- cambio grandezza della cover -->
         <it.moondroid.coverflow.components.ui.containers.FeatureCoverFlow
             android:id="@+id/coverflow"
             coverflow:coverHeight="100dp"
