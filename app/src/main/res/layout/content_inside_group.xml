@@ -50,7 +50,8 @@
                 android:text="@string/btnDetailes"
                 android:layout_weight="1"
                 android:id="@+id/buttonDetailes"
-                android:onClick="showDetailes"/>
+                android:onClick="showDetailes"
+                android:textStyle="bold" />
 
             <Button
                 android:layout_width="match_parent"
@@ -58,7 +59,8 @@
                 android:text="@string/btnComments"
                 android:layout_weight="1"
                 android:id="@+id/buttonComments"
-                android:onClick="showComments"/>
+                android:onClick="showComments"
+                android:textStyle="bold" />
 
         </LinearLayout>
 

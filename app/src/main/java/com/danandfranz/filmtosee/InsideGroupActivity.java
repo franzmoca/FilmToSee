@@ -4,9 +4,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -35,15 +39,27 @@ public class InsideGroupActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inside_group);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
+        //TOOLBAR
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarGroup);
+        setSupportActionBar(toolbar);
+        // Get a support ActionBar corresponding to this toolbar
+        ActionBar ab = getSupportActionBar();
+
+        // Enable the Up button
+        ab.setDisplayHomeAsUpEnabled(true);
+
+        //END OF TOOLBAR SETTINGS
+
+
+        //COVER FLOW
         coverFlow = (FeatureCoverFlow) findViewById(R.id.coverflow);
 
         settingDummyData();
         adapter = new CoverFlowAdapter(this, games);
         coverFlow.setAdapter(adapter);
         coverFlow.setOnScrollPositionListener(onScrollListener());
-
+        //END OF COVER FLOW
 
     }
 
@@ -92,6 +108,38 @@ public class InsideGroupActivity extends AppCompatActivity {
         y.setVisibility(View.VISIBLE);
 
     }
+
+
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                // User chose the "Settings" item, show the app settings UI...
+                return true;
+
+            case R.id.addUserGroup:
+                // User chose the "Favorite" action, mark the current item
+                // as a favorite...
+                return true;
+
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.inside_group, menu);
+        return true;
+    }
+
+
 
 }
 
