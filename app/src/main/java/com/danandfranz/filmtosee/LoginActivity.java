@@ -15,23 +15,33 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.JsonObjectRequest;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.HashMap;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 /**
  * A login screen that offers login via email/password.
  */
 public class LoginActivity extends AppCompatActivity  {
 
-
+    public String responseString = null;
     private static final String TAG = "LoginActivity";
+    public static final MediaType JSON
+            = MediaType.parse("application/json; charset=utf-8");
+    ProgressDialog progressDialog;
+
+    OkHttpClient client;
     private static final int REQUEST_SIGNUP = 0;
     // Session Manager Class
     SessionManager session;
@@ -42,12 +52,10 @@ public class LoginActivity extends AppCompatActivity  {
     private EditText mPasswordView;
     private Button signInButton;
     private TextView signUpLink;
-    DbAPI api;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        api = new DbAPI(this);
         session = new SessionManager(getApplicationContext());
         // Set up the login form.
         mEmailView = (EditText) findViewById(R.id.input_email);
@@ -89,7 +97,7 @@ public class LoginActivity extends AppCompatActivity  {
 
         signInButton.setEnabled(false);
 
-        final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this,
+        progressDialog = new ProgressDialog(LoginActivity.this,
                 R.style.AppTheme);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Authenticating...");
@@ -98,8 +106,12 @@ public class LoginActivity extends AppCompatActivity  {
         final String email = mEmailView.getText().toString();
         final String password = mPasswordView.getText().toString();
 
+        client = new OkHttpClient();
         // TODO: Implement your own authentication logic here.
-        //api.login(email, password);
+
+        Call newcall = getLogin(email, password);
+        signInButton.setEnabled(true);
+/*
 
         new android.os.Handler().postDelayed(
                 new Runnable() {
@@ -112,16 +124,24 @@ public class LoginActivity extends AppCompatActivity  {
                         }
                         progressDialog.dismiss();
                     }
-                }, 3000);
+                }, 3000);*/
+
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_SIGNUP) {
             if (resultCode == RESULT_OK) {
-
-                // TODO: Implement successful signup logic here
                 // By default we just finish the Activity and log them in automatically
-                this.finish();
+                //this.finish();
+                rootlayout = (ScrollView) findViewById(R.id.rootlayout);
+                Snackbar.make(rootlayout, "Signup success!", Snackbar.LENGTH_LONG)
+                        .setAction("Close", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                // Perform anything for the action selected
+                            }
+                        }).setDuration(Snackbar.LENGTH_LONG).show();
+
             }
         }
     }
@@ -132,9 +152,9 @@ public class LoginActivity extends AppCompatActivity  {
         moveTaskToBack(true);
     }
 
-    public void onLoginSuccess() {
-        signInButton.setEnabled(true);
-        session.createLoginSession("Franz", mEmailView.getText().toString());
+    public void onLoginSuccess(String username, String rid) {
+        //signInButton.setEnabled(true);
+        session.createLoginSession(username, mEmailView.getText().toString() ,rid);
 
         Intent intent = new Intent(getApplicationContext(), GroupsActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); //makes sure that you cannot go back to the previous activity with the BACK button.
@@ -154,7 +174,7 @@ public class LoginActivity extends AppCompatActivity  {
                 }).setDuration(Snackbar.LENGTH_SHORT).show();
 
 
-        signInButton.setEnabled(true);
+        //signInButton.setEnabled(true);
     }
 
     public boolean validate() {
@@ -171,7 +191,7 @@ public class LoginActivity extends AppCompatActivity  {
         }
 
         if (password.isEmpty() || password.length() < 4 || password.length() > 10) {
-            mPasswordView.setError("between 4 and 10 alphanumeric characters");
+            mPasswordView.setError("between 4 and 10false alphanumeric characters");
             valid = false;
         } else {
             mPasswordView.setError(null);
@@ -180,35 +200,61 @@ public class LoginActivity extends AppCompatActivity  {
         return valid;
     }
 
-/*
-    public void login(String mail,String pwd) throws JSONException{
-// Post params to be sent to the server
-        HashMap<String, String> params = new HashMap<String, String>();
-        params.put("get","login");
-        params.put("email", mail);
-        params.put("password", pwd); //TODO
 
+    public Call getLogin(String mail,String pwd) throws JSONException{
+        RequestBody body;
+        body = new FormBody.Builder()
+                .add("get","login")
+                .add("email", mail)
+                .add("password",pwd)
+                .build();
+        try {
+            return post(body, new Callback() {
+                @Override public void onFailure(Call call, IOException e) {
+                    e.printStackTrace();
+                }
 
-        JsonObjectRequest req = new JsonObjectRequest(DbAPI.URL, new JSONObject(params),
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            VolleyLog.v("Response:%n %s", response.toString(4));
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                @Override public void onResponse(Call call , Response response) throws IOException {
+                    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+                    //System.out.println(response.body().toString());
+                    try {
+                        String json = response.body().string();
+                        Log.d(TAG,json);
+                        JSONObject jsonObj = new JSONObject(json);
+                        String result = jsonObj.getString("result");
+                        String rid = jsonObj.getString("id");
+                        String username = jsonObj.getString("username");
+
+                        Log.d(TAG,result);
+                        if (result.equalsIgnoreCase("success")) {
+                            onLoginSuccess(username,rid);
+                        } else {
+                            onLoginFailed();
                         }
+                        progressDialog.dismiss();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
+                }
 
-                VolleyLog.e("Error: ", error.toString());
-            }
-        });
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
-// add the request object to the queue to be executed
-        mRequestQueue.add(req);
-    }*/
+    Call post( RequestBody body, Callback callback) throws IOException {
+        Request request = new Request.Builder()
+                .url(getString(R.string.API))
+                .post(body)
+                .build();
+        Call call = client.newCall(request);
+        call.enqueue(callback);
+
+        return call;
+
+    }
+
 }
 

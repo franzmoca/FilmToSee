@@ -35,6 +35,9 @@ public class SessionManager {
     // Email address (make variable public to access from outside)
     public static final String KEY_EMAIL = "email";
 
+    // RID address (make variable public to access from outside)
+    public static final String KEY_RID = "rid";
+
     // Constructor
     public SessionManager(Context context){
         this._context = context;
@@ -45,7 +48,7 @@ public class SessionManager {
     /**
      * Create login session
      * */
-    public void createLoginSession(String name, String email){
+    public void createLoginSession(String name, String email, String rid){
         // Storing login value as TRUE
         editor.putBoolean(IS_LOGIN, true);
 
@@ -54,6 +57,9 @@ public class SessionManager {
 
         // Storing email in pref
         editor.putString(KEY_EMAIL, email);
+
+        // Storing rid in pref
+        editor.putString(KEY_RID, rid);
 
         // commit changes
         editor.commit();
@@ -93,6 +99,9 @@ public class SessionManager {
 
         // user email id
         user.put(KEY_EMAIL, pref.getString(KEY_EMAIL, null));
+
+        // user email id
+        user.put(KEY_RID, pref.getString(KEY_RID, null));
 
         // return user
         return user;
