@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
@@ -30,69 +31,47 @@
             />
 
     </RelativeLayout>
-
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/relativeLayout"
-        android:layout_centerHorizontal="true">
+        android:layout_height="match_parent"
+        android:layout_below="@+id/relativeLayout">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="2"
-            android:id="@+id/linearForButtons">
-
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/btnDetailes"
-                android:layout_weight="1"
-                android:id="@+id/buttonDetailes"
-                android:onClick="showDetailes"
-                android:textStyle="bold" />
-
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/btnComments"
-                android:layout_weight="1"
-                android:id="@+id/buttonComments"
-                android:onClick="showComments"
-                android:textStyle="bold" />
-
-        </LinearLayout>
-
-        <RelativeLayout
+        <android.support.design.widget.CoordinatorLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/linearForButtons"
-            android:background="#ffffff"
-            android:id="@+id/layoutDetailes">
+            >
 
+            <android.support.design.widget.AppBarLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/barTop"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-        </RelativeLayout>
+                <android.support.v7.widget.Toolbar
+                    android:id="@+id/toolbarFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:background="@color/primary_dark"
+                    app:layout_scrollFlags="scroll|enterAlways"
+                    app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/linearForButtons"
-            android:background="#ccc"
-            android:id="@+id/layoutComments">
+                <android.support.design.widget.TabLayout
+                    android:id="@+id/tabs"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/primary_dark"
+                    app:tabMode="fixed"
+                    app:tabGravity="fill"/>
+            </android.support.design.widget.AppBarLayout>
 
-
-            <ScrollView
+            <android.support.v4.view.ViewPager
+                android:id="@+id/viewpager"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/scrollView" >
-
-
-            </ScrollView>
-        </RelativeLayout>
-
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"  />
+        </android.support.design.widget.CoordinatorLayout>
     </RelativeLayout>
-
 </RelativeLayout>
+
 
 

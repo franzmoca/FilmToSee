@@ -1,9 +1,12 @@
 package com.danandfranz.filmtosee;
 
-import android.net.Uri;
+
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -12,28 +15,32 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-
-import com.google.android.gms.appindexing.Action;
-import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
-
 import java.util.ArrayList;
+import java.util.List;
+
+import com.danandfranz.filmtosee.R;
+import com.danandfranz.filmtosee.OneFragment;
+import com.danandfranz.filmtosee.TwoFragment;
 
 import it.moondroid.coverflow.components.ui.containers.FeatureCoverFlow;
 
-public class InsideGroupActivity extends AppCompatActivity {
+
+
+public class InsideGroupActivity  extends AppCompatActivity {
 
 
     private FeatureCoverFlow coverFlow;
     private CoverFlowAdapter adapter;
     private ArrayList<Game> games;
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-    private GoogleApiClient client;
+
+
+    //SWIPE
+    private Toolbar toolbarFragment;
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
+    //END SWIPE
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +68,19 @@ public class InsideGroupActivity extends AppCompatActivity {
         coverFlow.setOnScrollPositionListener(onScrollListener());
         //END OF COVER FLOW
 
+        //swipe
+
+        toolbarFragment = (Toolbar) findViewById(R.id.toolbarFragment);
+        setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        setupViewPager(viewPager);
+
+        tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(viewPager);
+        //end swipe
     }
 
     private FeatureCoverFlow.OnScrollPositionListener onScrollListener() {
@@ -91,26 +111,6 @@ public class InsideGroupActivity extends AppCompatActivity {
         games.add(new Game(R.mipmap.need_for_speed_most_wanted, "Need for Speed Most Wanted"));
     }
 
-   public void showDetailes(View v) {
-        RelativeLayout r = (RelativeLayout) findViewById(R.id.layoutDetailes);
-       RelativeLayout y = (RelativeLayout) findViewById(R.id.layoutComments);
-
-        y.setVisibility(View.INVISIBLE);
-        r.setVisibility(View.VISIBLE);
-
-    }
-
-   public void showComments(View v) {
-       RelativeLayout r = (RelativeLayout) findViewById(R.id.layoutDetailes);
-       RelativeLayout y = (RelativeLayout) findViewById(R.id.layoutComments);
-
-        r.setVisibility(View.INVISIBLE);
-        y.setVisibility(View.VISIBLE);
-
-    }
-
-
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -139,7 +139,43 @@ public class InsideGroupActivity extends AppCompatActivity {
         return true;
     }
 
+    //SWIPE
+    private void setupViewPager(ViewPager viewPager) {
+        ViewPagerAdapter adapter1 = new ViewPagerAdapter(getSupportFragmentManager());
+        adapter1.addFragment(new OneFragment(), "MOVIE DETAILES");
+        adapter1.addFragment(new TwoFragment(), "COMMENTS");
+        viewPager.setAdapter(adapter1);
+    }
 
+    class ViewPagerAdapter extends FragmentPagerAdapter {
+        private final List<Fragment> mFragmentList = new ArrayList<>();
+        private final List<String> mFragmentTitleList = new ArrayList<>();
 
+        public ViewPagerAdapter(FragmentManager manager) {
+            super(manager);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return mFragmentList.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return mFragmentList.size();
+        }
+
+        public void addFragment(Fragment fragment, String title) {
+            mFragmentList.add(fragment);
+            mFragmentTitleList.add(title);
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mFragmentTitleList.get(position);
+        }
+    }
+
+    //END SWIPE
 }
 
