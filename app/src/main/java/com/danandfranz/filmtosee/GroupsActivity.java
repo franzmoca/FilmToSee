@@ -58,6 +58,8 @@ public class GroupsActivity extends AppCompatActivity
         String name = user.get(SessionManager.KEY_NAME);
         // email
         String email = user.get(SessionManager.KEY_EMAIL);
+        String rid = user.get(SessionManager.KEY_RID);
+        Log.d(TAG,"RID: "+rid);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         Log.d(TAG, "Name " + name + " Email " + email);
         try {
@@ -117,9 +119,7 @@ public class GroupsActivity extends AppCompatActivity
         ImageView avatar = (ImageView) headerView.findViewById(R.id.avatar);
         TextView username = (TextView) headerView.findViewById(R.id.user);
         TextView mail = (TextView) headerView.findViewById(R.id.email);
-        Log.d(TAG,"username: "+username.getText());
         username.setText(name);
-        Log.d(TAG, "username: " + username.getText());
         mail.setText(email);
         //controlla se c'è l'avatar sul db e semmai lo scarica
         if(!avatarPresent()){
