@@ -65,15 +65,24 @@ public class InsideGroupActivity  extends AppCompatActivity {
 
         //END OF TOOLBAR SETTINGS
 
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
 
-        //COVER FLOW
-        coverFlow = (FeatureCoverFlow) findViewById(R.id.coverflow);
+            //stuff that updates ui
+                //COVER FLOW
+                coverFlow = (FeatureCoverFlow) findViewById(R.id.coverflow);
 
-        settingDummyData();
-        adapter = new CoverFlowAdapter(this, games);
-        coverFlow.setAdapter(adapter);
-        coverFlow.setOnScrollPositionListener(onScrollListener());
-        //END OF COVER FLOW
+                settingDummyData();
+                adapter = new CoverFlowAdapter(InsideGroupActivity.this, games);
+                coverFlow.setAdapter(adapter);
+                coverFlow.setOnScrollPositionListener(onScrollListener());
+                //END OF COVER FLOW
+
+
+            }
+        });
+
 
         //swipe
 
