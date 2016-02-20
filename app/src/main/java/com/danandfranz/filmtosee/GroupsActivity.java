@@ -7,9 +7,11 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -23,6 +25,9 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.afollestad.materialdialogs.Theme;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -76,6 +81,9 @@ public class GroupsActivity extends AppCompatActivity
         // email
         String email = user.get(SessionManager.KEY_EMAIL);
         String rid = user.get(SessionManager.KEY_RID);
+        if(name==null){
+            session.logoutUser();
+        }
         Log.d(TAG,"RID: "+rid);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         Log.d(TAG, "Name " + name + " Email " + email);
@@ -91,7 +99,7 @@ public class GroupsActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                createNewGroup();
             }
         });
 
@@ -102,7 +110,12 @@ public class GroupsActivity extends AppCompatActivity
         toggle.syncState();
         //CARTE
         client = new OkHttpClient();
-        getCards(name); //TODO: PROGRESS BAR
+        try {
+            getCards(name); //TODO: PROGRESS BAR
+        }catch (Exception e){
+            e.printStackTrace();
+            session.logoutUser();
+        }
     }
 
     private void getCards(String username) {
@@ -168,7 +181,6 @@ public class GroupsActivity extends AppCompatActivity
         }
 
         CardArrayRecyclerViewAdapter mCardArrayAdapter = new CardArrayRecyclerViewAdapter(this, cards);
-
         //Staggered grid view
         CardRecyclerView mRecyclerView = (CardRecyclerView) this.findViewById(R.id.carddemo_recyclerview);
         mRecyclerView.setHasFixedSize(false);
@@ -177,6 +189,7 @@ public class GroupsActivity extends AppCompatActivity
         //Set the empty view
         if (mRecyclerView != null) {
             mRecyclerView.setAdapter(mCardArrayAdapter);
+            //mCardArrayAdapter.notifyDataSetChanged();
         }
     }
     private Card createCard(String groupName,JSONArray members) throws JSONException {
@@ -272,7 +285,7 @@ public class GroupsActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.new_group) {
-            // Handle the camera action
+            createNewGroup();
         } else if (id == R.id.invite_friend) {
 
         } else if (id == R.id.settings) {
@@ -280,6 +293,8 @@ public class GroupsActivity extends AppCompatActivity
             startActivity(intent);
 
         } else if (id == R.id.faq) {
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://normandy.dmi.unipg.it/blockchainvis/Film/faq.html"));
+            startActivity(browserIntent);
 
         } else if (id == R.id.logout) {
             session.logoutUser();
@@ -288,5 +303,68 @@ public class GroupsActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void createNewGroup() {
+
+        new MaterialDialog.Builder(this)
+                .title("Create new Group")
+                .content("Name of the group")
+                .theme(Theme.LIGHT)
+                .inputType(InputType.TYPE_CLASS_TEXT)
+                .input("Choose a good name!", "", new MaterialDialog.InputCallback() {
+                    @Override
+                    public void onInput(MaterialDialog dialog, CharSequence input) {
+                        // Do something
+                        Log.d(TAG, "call createGroupPost" + input.toString());
+                        createGroupPost(input.toString());
+                    }
+                }).show();
+
+    }
+    private void createGroupPost(String input){
+        HashMap<String, String> user = session.getUserDetails();
+        final String name = user.get(SessionManager.KEY_NAME);
+        RequestBody body;
+        body = new FormBody.Builder()
+                .add("get","createGroup")
+                .add("groupName",input)
+                .add("username", name)
+                .build();
+        try {
+            Util.post(body,client, new Callback() {
+                @Override public void onFailure(Call call, IOException e) {
+                    e.printStackTrace();
+                }
+
+                @Override public void onResponse(Call call , Response response) throws IOException {
+                    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+                    //System.out.println(response.body().toString());
+                    try {
+                        String json = response.body().string();
+                        Log.d(TAG,json);
+                        JSONObject jsonObj = new JSONObject(json);
+                        String result = jsonObj.getString("result");
+                        Log.d(TAG, result);
+                        if (result.equalsIgnoreCase("success")) {
+                            GroupsActivity.this.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    //Handle UI here
+                                    //findViewById(R.id.loading).setVisibility(View.GONE);
+                                    getCards(name);
+                                }
+                            });
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

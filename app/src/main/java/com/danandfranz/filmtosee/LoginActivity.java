@@ -221,11 +221,11 @@ public class LoginActivity extends AppCompatActivity  {
                         Log.d(TAG,json);
                         JSONObject jsonObj = new JSONObject(json);
                         String result = jsonObj.getString("result");
-                        String rid = jsonObj.getString("id");
-                        String username = jsonObj.getString("username");
 
                         Log.d(TAG,result);
                         if (result.equalsIgnoreCase("success")) {
+                            String rid = jsonObj.getString("id");
+                            String username = jsonObj.getString("username");
                             onLoginSuccess(username,rid);
                         } else {
                             onLoginFailed();
