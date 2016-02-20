@@ -1,15 +1,16 @@
 package com.danandfranz.filmtosee;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.Color;
+import android.graphics.Canvas;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -23,24 +24,40 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import it.gmariotti.cardslib.library.internal.Card;
 import it.gmariotti.cardslib.library.internal.CardHeader;
+import it.gmariotti.cardslib.library.internal.CardThumbnail;
 import it.gmariotti.cardslib.library.recyclerview.internal.CardArrayRecyclerViewAdapter;
 import it.gmariotti.cardslib.library.recyclerview.view.CardRecyclerView;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class GroupsActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     // Session Manager Class
     SessionManager session;
     private static final String TAG = "GroupsActivity";
+    LetterTileProvider tileProvider;
+
+    OkHttpClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_groups);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         //CONTROLLO LOGIN
         session = new SessionManager(getApplicationContext());
         //Toast.makeText(getApplicationContext(), "User Login Status: " + session.isLoggedIn(), Toast.LENGTH_LONG).show();
@@ -50,7 +67,7 @@ public class GroupsActivity extends AppCompatActivity
          * logged in
          * */
         session.checkLogin();
-
+        tileProvider = new LetterTileProvider(this);
         // get user data from session
         HashMap<String, String> user = session.getUserDetails();
 
@@ -84,18 +101,57 @@ public class GroupsActivity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
         //CARTE
+        client = new OkHttpClient();
+        getCards(name); //TODO: PROGRESS BAR
+    }
 
+    private void getCards(String username) {
+
+
+        RequestBody body;
+        body = new FormBody.Builder()
+                .add("get","groupOfUserAndUsersOfGroup")
+                .add("username", username )
+                .build();
+        try {
+            Util.post(body,client, new Callback() {
+                @Override public void onFailure(Call call, IOException e) {
+                    e.printStackTrace();
+                }
+
+                @Override public void onResponse(Call call , Response response) throws IOException {
+                    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+                    //System.out.println(response.body().toString());
+                    try {
+                        String json = response.body().string();
+                        Log.d(TAG,json);
+                        JSONObject jsonObj = new JSONObject(json);
+                        /*
+                        String result = jsonObj.getString("result");
+                        String rid = jsonObj.getString("id");
+                        String username = jsonObj.getString("username");
+*/
+                        JSONArray groups = jsonObj.getJSONArray("groups");
+                        setCards(groups);
+                        } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    private void setCards(JSONArray groups) throws JSONException {
         ArrayList<Card> cards = new ArrayList<Card>();
 
-        //Create a Card
-        Card card = new Card(this);
-        //Create a CardHeader
-        CardHeader header = new CardHeader(this);
-        header.setTitle("CineForum");
-        //Add Header to card
-        card.addCardHeader(header);
+        for(int i = 0; i<groups.length();i++){
 
-        cards.add(card);
+            String name = groups.getJSONObject(i).getString("name");
+            JSONArray members = groups.getJSONObject(i).getJSONArray("members");
+            cards.add(createCard(name,groups.getJSONObject(i).getJSONArray("members")));
+        }
 
         CardArrayRecyclerViewAdapter mCardArrayAdapter = new CardArrayRecyclerViewAdapter(this, cards);
 
@@ -109,7 +165,35 @@ public class GroupsActivity extends AppCompatActivity
             mRecyclerView.setAdapter(mCardArrayAdapter);
         }
     }
+    private Card createCard(String groupName,JSONArray members) throws JSONException {
+        //Create a Card
+        Card card = new Card(this);
+        String memstr = "";
+        for ( int z = 0;z<members.length();z++){
+            memstr+=" "+members.getString(z)+" ";
+        }
+        card.setTitle("8 films to see!" +
+                "   "+memstr+" "); //Aggiorna il numero
+        //Create a CardHeader
+        CardHeader header = new CardHeader(this);
+        header.setTitle(groupName);
+        //Add Header to card
+        card.addCardHeader(header);
 
+        //Add ClickListener
+        card.setOnClickListener(new Card.OnCardClickListener() {
+            @Override
+            public void onClick(Card card, View view) {
+                Toast.makeText(GroupsActivity.this, "Click Listener card=" + card.getCardHeader().getTitle(), Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(GroupsActivity.this, InsideGroupActivity.class);
+                startActivity(intent);
+
+            }
+        });
+
+        return card;
+
+    }
     private void setAvatar(String name, String email) {
 //        View headerView = LayoutInflater.from(this).inflate(R.layout.nav_header_groups, null);
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -125,12 +209,9 @@ public class GroupsActivity extends AppCompatActivity
         if(!avatarPresent()){
             final Resources res = getResources();
             final int tileSize = res.getDimensionPixelSize(R.dimen.letter_tile_size);
-            final LetterTileProvider tileProvider = new LetterTileProvider(this);
             final RoundedAvatarDrawable letterTile = tileProvider.getCircleLetterTile(name, "key", tileSize, tileSize);
             avatar.setImageDrawable(letterTile);
         }
-        //Aggiunge CARTE
-
     }
 
     private boolean avatarPresent() {

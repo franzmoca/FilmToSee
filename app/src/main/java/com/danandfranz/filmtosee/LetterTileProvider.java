@@ -91,7 +91,7 @@ public class LetterTileProvider {
     }
     public RoundedAvatarDrawable getCircleLetterTile(String displayName, String key, int width, int height) {
         final Bitmap bitmap = getLetterTile(displayName, key,  width,  height);
-        RoundedAvatarDrawable circle = new RoundedAvatarDrawable(bitmap);
+        final RoundedAvatarDrawable circle = new RoundedAvatarDrawable(bitmap);
         return circle;
     }
 
@@ -117,7 +117,7 @@ public class LetterTileProvider {
         try {
             return mColors.getColor(color, Color.BLACK);
         } finally {
-            mColors.recycle();
+           //mColors.recycle();
         }
     }
 

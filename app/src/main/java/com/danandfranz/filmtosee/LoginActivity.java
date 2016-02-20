@@ -97,8 +97,7 @@ public class LoginActivity extends AppCompatActivity  {
 
         signInButton.setEnabled(false);
 
-        progressDialog = new ProgressDialog(LoginActivity.this,
-                R.style.AppTheme);
+        progressDialog = new ProgressDialog(LoginActivity.this);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Authenticating...");
         progressDialog.show();
@@ -209,7 +208,7 @@ public class LoginActivity extends AppCompatActivity  {
                 .add("password",pwd)
                 .build();
         try {
-            return post(body, new Callback() {
+            return Util.post(body,client, new Callback() {
                 @Override public void onFailure(Call call, IOException e) {
                     e.printStackTrace();
                 }
@@ -243,18 +242,5 @@ public class LoginActivity extends AppCompatActivity  {
             return null;
         }
     }
-
-    Call post( RequestBody body, Callback callback) throws IOException {
-        Request request = new Request.Builder()
-                .url(getString(R.string.API))
-                .post(body)
-                .build();
-        Call call = client.newCall(request);
-        call.enqueue(callback);
-
-        return call;
-
-    }
-
 }
 

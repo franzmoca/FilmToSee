@@ -49,6 +49,7 @@ public class SignupActivity extends AppCompatActivity {
         _signupButton = (Button) findViewById(R.id.btn_signup);
         _loginLink = (TextView) findViewById(R.id.link_login);
 
+
         _signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -75,12 +76,11 @@ public class SignupActivity extends AppCompatActivity {
 
         _signupButton.setEnabled(false);
 
-        progressDialog = new ProgressDialog(SignupActivity.this,
-                R.style.AppTheme);
+        progressDialog = new ProgressDialog(SignupActivity.this);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Creating Account...");
         progressDialog.show();
-        progressDialog.getWindow().setGravity(Gravity.CENTER);
+        progressDialog.getWindow().setGravity(Gravity.CENTER_VERTICAL);
         String name = _nameText.getText().toString();
         String email = _emailText.getText().toString();
         String password = _passwordText.getText().toString();
@@ -166,7 +166,7 @@ public class SignupActivity extends AppCompatActivity {
                 .add("password",pwd)
                 .build();
         try {
-            return post(body, new Callback() {
+            return Util.post(body,client, new Callback() {
                 @Override public void onFailure(Call call, IOException e) {
                     e.printStackTrace();
                 }
@@ -201,16 +201,6 @@ public class SignupActivity extends AppCompatActivity {
         }
     }
 
-    Call post( RequestBody body, Callback callback) throws IOException {
-        Request request = new Request.Builder()
-                .url(getString(R.string.API))
-                .post(body)
-                .build();
-        Call call = client.newCall(request);
-        call.enqueue(callback);
 
-        return call;
-
-    }
 
 }
