@@ -131,11 +131,25 @@ public class GroupsActivity extends AppCompatActivity
                         String rid = jsonObj.getString("id");
                         String username = jsonObj.getString("username");
 */
-                        JSONArray groups = jsonObj.getJSONArray("groups");
-                        setCards(groups);
+                        final JSONArray groups = jsonObj.getJSONArray("groups");
+                        GroupsActivity.this.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                //Handle UI here
+                                //findViewById(R.id.loading).setVisibility(View.GONE);
+                                try {
+                                    setCards(groups);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+
+                            }
+                        });
+
                         } catch (JSONException e) {
                         e.printStackTrace();
                     }
+
                 }
 
             });
