@@ -1,11 +1,6 @@
 package com.danandfranz.filmtosee;
 
 
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.ClipData;
-import android.support.v4.app.DialogFragment;
-import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -20,15 +15,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.RelativeLayout;
-import com.google.android.gms.common.api.GoogleApiClient;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import com.danandfranz.filmtosee.R;
-import com.danandfranz.filmtosee.OneFragment;
-import com.danandfranz.filmtosee.TwoFragment;
 
 import it.moondroid.coverflow.components.ui.containers.FeatureCoverFlow;
 
@@ -39,7 +28,7 @@ public class InsideGroupActivity  extends AppCompatActivity {
 
     private FeatureCoverFlow coverFlow;
     private CoverFlowAdapter adapter;
-    private ArrayList<Game> games;
+    private ArrayList<Film> films;
 
 
     //SWIPE
@@ -74,7 +63,7 @@ public class InsideGroupActivity  extends AppCompatActivity {
                 coverFlow = (FeatureCoverFlow) findViewById(R.id.coverflow);
 
                 settingDummyData();
-                adapter = new CoverFlowAdapter(InsideGroupActivity.this, games);
+                adapter = new CoverFlowAdapter(InsideGroupActivity.this, films);
                 coverFlow.setAdapter(adapter);
                 coverFlow.setOnScrollPositionListener(onScrollListener());
                 //END OF COVER FLOW
@@ -116,17 +105,17 @@ public class InsideGroupActivity  extends AppCompatActivity {
     }
 
     private void settingDummyData() {
-        games = new ArrayList<>();
-        games.add(new Game(R.mipmap.assassins_creed, "Assassin Creed 3"));
-        games.add(new Game(R.mipmap.avatar_3d, "Avatar 3D"));
-        games.add(new Game(R.mipmap.call_of_duty_black_ops_3, "Call Of Duty Black Ops 3"));
-        games.add(new Game(R.mipmap.dota_2, "DotA 2"));
-        games.add(new Game(R.mipmap.halo_5, "Halo 5"));
-        games.add(new Game(R.mipmap.left_4_dead_2, "Left 4 Dead 2"));
-        games.add(new Game(R.mipmap.starcraft, "StarCraft"));
-        games.add(new Game(R.mipmap.the_witcher_3, "The Witcher 3"));
-        games.add(new Game(R.mipmap.tomb_raider, "Tom raider 3"));
-        games.add(new Game(R.mipmap.need_for_speed_most_wanted, "Need for Speed Most Wanted"));
+        films = new ArrayList<>();
+        films.add(new Film(R.mipmap.assassins_creed, "Assassin Creed 3"));
+        films.add(new Film(R.mipmap.avatar_3d, "Avatar 3D"));
+        films.add(new Film(R.mipmap.call_of_duty_black_ops_3, "Call Of Duty Black Ops 3"));
+        films.add(new Film(R.mipmap.dota_2, "DotA 2"));
+        films.add(new Film(R.mipmap.halo_5, "Halo 5"));
+        films.add(new Film(R.mipmap.left_4_dead_2, "Left 4 Dead 2"));
+        films.add(new Film(R.mipmap.starcraft, "StarCraft"));
+        films.add(new Film(R.mipmap.the_witcher_3, "The Witcher 3"));
+        films.add(new Film(R.mipmap.tomb_raider, "Tom raider 3"));
+        films.add(new Film(R.mipmap.need_for_speed_most_wanted, "Need for Speed Most Wanted"));
     }
 
 

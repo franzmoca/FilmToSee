@@ -1,12 +1,12 @@
 package com.danandfranz.filmtosee;
 
 
-public class Game {
+public class Film {
 
     private String name;
     private int imageSource;
 
-    public Game (int imageSource, String name) {
+    public Film(int imageSource, String name) {
         this.name = name;
         this.imageSource = imageSource;
     }

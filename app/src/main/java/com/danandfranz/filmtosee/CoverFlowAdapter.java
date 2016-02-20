@@ -7,9 +7,7 @@ import android.view.View;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
@@ -19,10 +17,10 @@ import java.util.ArrayList;
 
 public class CoverFlowAdapter extends BaseAdapter {
 
-    private ArrayList<Game> data;
+    private ArrayList<Film> data;
     private AppCompatActivity activity;
 
-    public CoverFlowAdapter(AppCompatActivity context, ArrayList<Game> objects) {
+    public CoverFlowAdapter(AppCompatActivity context, ArrayList<Film> objects) {
         this.activity = context;
         this.data = objects;
     }
@@ -33,7 +31,7 @@ public class CoverFlowAdapter extends BaseAdapter {
     }
 
     @Override
-    public Game getItem(int position) {
+    public Film getItem(int position) {
         return data.get(position);
     }
 
@@ -73,7 +71,7 @@ public class CoverFlowAdapter extends BaseAdapter {
                 final Dialog dialog = new Dialog(activity);
                 dialog.setContentView(R.layout.dialog_game_info);
                 dialog.setCancelable(true); // dimiss when touching outside
-                dialog.setTitle("Game Details");
+                dialog.setTitle("Film Details");
 
                 TextView text = (TextView) dialog.findViewById(R.id.name);
                 text.setText(getItem(position).getName());
