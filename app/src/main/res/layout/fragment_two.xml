@@ -45,7 +45,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="left"
 
-                       >
+                        >
 
 
                         <TextView
@@ -106,8 +106,7 @@
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
                     android:layout_toLeftOf="@+id/sendBtn"
-                    android:hint="Insert Comment"
-                    />
+                    android:hint="Insert Comment" />
             </android.support.design.widget.TextInputLayout>
 
             <Button

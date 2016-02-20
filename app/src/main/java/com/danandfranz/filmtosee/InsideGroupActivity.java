@@ -1,6 +1,12 @@
 package com.danandfranz.filmtosee;
 
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.ClipData;
+import android.net.Uri;
+import android.support.v4.app.DialogFragment;
+import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -15,9 +21,19 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewTreeObserver;
+import android.widget.RelativeLayout;
 
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.danandfranz.filmtosee.R;
+import com.danandfranz.filmtosee.OneFragment;
+import com.danandfranz.filmtosee.TwoFragment;
 
 import it.moondroid.coverflow.components.ui.containers.FeatureCoverFlow;
 
@@ -58,15 +74,14 @@ public class InsideGroupActivity  extends AppCompatActivity {
             @Override
             public void run() {
 
-            //stuff that updates ui
-                //COVER FLOW
-                coverFlow = (FeatureCoverFlow) findViewById(R.id.coverflow);
+        //COVER FLOW
+        coverFlow = (FeatureCoverFlow) findViewById(R.id.coverflow);
 
-                settingDummyData();
-                adapter = new CoverFlowAdapter(InsideGroupActivity.this, films);
-                coverFlow.setAdapter(adapter);
-                coverFlow.setOnScrollPositionListener(onScrollListener());
-                //END OF COVER FLOW
+        settingDummyData();
+        adapter = new CoverFlowAdapter(InsideGroupActivity.this, films);
+        coverFlow.setAdapter(adapter);
+        coverFlow.setOnScrollPositionListener(onScrollListener());
+        //END OF COVER FLOW
 
 
             }
