@@ -23,9 +23,6 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:textColor="@android:color/holo_green_dark" />
-        android:layout_height="60dp"
-        android:id="@+id/removeFilm"
-
 
 
         <Button

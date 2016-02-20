@@ -12,11 +12,12 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".GroupsActivity"
     tools:showIn="@layout/app_bar_groups"
-    android:background="#ffffff"
+    android:background="@drawable/pattern_home"
     >
     <it.gmariotti.cardslib.library.recyclerview.view.CardRecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         card:list_card_layout_resourceID="@layout/native_recyclerview_card_layout"
         android:id="@+id/carddemo_recyclerview"/>
+
 </RelativeLayout>

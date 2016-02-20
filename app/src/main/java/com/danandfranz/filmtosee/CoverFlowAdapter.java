@@ -10,8 +10,12 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.afollestad.materialdialogs.Theme;
 
 import java.util.ArrayList;
 
@@ -71,12 +75,28 @@ public class CoverFlowAdapter extends BaseAdapter {
                 final Dialog dialog = new Dialog(activity);
                 dialog.setContentView(R.layout.dialog_game_info);
                 dialog.setCancelable(true); // dimiss when touching outside
-                dialog.setTitle("Film Details");
+                //dialog.setTitle("Film Details");
 
                 TextView text = (TextView) dialog.findViewById(R.id.name);
                 text.setText(getItem(position).getName());
                 ImageView image = (ImageView) dialog.findViewById(R.id.image);
                 image.setImageResource(getItem(position).getImageSource());
+                Button delete = (Button) dialog.findViewById(R.id.removeFilm);
+                delete.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.hide();
+                        new MaterialDialog.Builder(activity)
+                                .title("Confim?")
+                                .content("Are you sure you want to remove " + getItem(position).getName() + " from this group?")
+                                .theme(Theme.LIGHT)
+                                .positiveText("Yes")
+                                .negativeText("Cancel")
+                                .icon(activity.getResources().getDrawable(R.drawable.ic_delete_24dp))
+                                .show();
+
+                    }
+                });
 
                 dialog.show();
             }

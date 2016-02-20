@@ -5,26 +5,26 @@
 
     <item
         android:id="@+id/addUserGroup"
-        android:icon="@drawable/ic_persona_add_24dp_white"
-        android:title=""
+        android:icon="@drawable/ic_add_circle_24dp"
+        android:title="Add Film"
         app:showAsAction="ifRoom"/>
     <item
         android:id="@+id/addFilmGroup"
-        android:icon="@drawable/ic_persona_add_24dp_white"
-        android:title=""
+        android:icon="@drawable/ic_groups_white"
+        android:title="Add Member"
         app:showAsAction="ifRoom"/>
 
     <!-- Settings, should always be in the overflow -->
     <item android:id="@+id/membri_gruppo"
-        android:title="Membri Gruppo"
+        android:title="Group Members"
         app:showAsAction="never"/>
     <item android:id="@+id/aggiungi_membro"
-        android:title="Aggiungi Membro"
+        android:title="Add Member"
         app:showAsAction="never"/>
     <item android:id="@+id/silenzia_notifiche"
-        android:title="Silenzia Notifiche"
+        android:title="Silince Notifications"
         app:showAsAction="never"/>
     <item android:id="@+id/lascia_gruppo"
-        android:title="Elimina e Lascia Gruppo"
+        android:title="Delete and Leave Group"
         app:showAsAction="never"/>
 </menu>
