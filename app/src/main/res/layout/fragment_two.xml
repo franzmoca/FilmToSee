@@ -18,6 +18,67 @@
             android:id="@+id/scrollView" >
 
 
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:weightSum="2"
+                android:background="@color/iron"
+                android:isScrollContainer="false">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/chatAvatar"
+                    android:layout_weight="0.3"
+                    android:src="@mipmap/ic_launcher" />
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:weightSum="2">
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+
+                       >
+
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
+                            android:text="User"
+                            android:id="@+id/chatUsername" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="That&apos;s cool man fsfsfsdfsfsdfdssd \ndadasd"
+                            android:id="@+id/textView3" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="ore 15:23"
+                            android:id="@+id/chatOre"
+                            android:layout_weight="2"
+                            android:gravity="bottom"
+                            android:textSize="10dp" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
         </ScrollView>
         <RelativeLayout
             android:orientation="vertical"

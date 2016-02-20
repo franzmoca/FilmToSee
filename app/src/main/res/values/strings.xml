@@ -25,9 +25,12 @@
         a new design language that refreshed the entire Android experience
     </string>
     <string name="title_activity_inside_group">InsideGroupActivity</string>
+    <string name="API" >http://normandy.dmi.unipg.it/blockchainvis/Film/orient.php</string>
 
 
     <!-- Strings related to inside Group -->
     <string name="btnDetailes">Movie Detailes</string>
     <string name="btnComments">Comments</string>
+    <string name="REMOVE" />
+    <string name="CANCEL" />
 </resources>

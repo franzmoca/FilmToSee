@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/actionBarGroup">
 
     <item
         android:id="@+id/addUserGroup"
@@ -14,7 +15,16 @@
         app:showAsAction="ifRoom"/>
 
     <!-- Settings, should always be in the overflow -->
-    <item android:id="@+id/action_settings"
-        android:title="@string/action_settings"
+    <item android:id="@+id/membri_gruppo"
+        android:title="Membri Gruppo"
+        app:showAsAction="never"/>
+    <item android:id="@+id/aggiungi_membro"
+        android:title="Aggiungi Membro"
+        app:showAsAction="never"/>
+    <item android:id="@+id/silenzia_notifiche"
+        android:title="Silenzia Notifiche"
+        app:showAsAction="never"/>
+    <item android:id="@+id/lascia_gruppo"
+        android:title="Elimina e Lascia Gruppo"
         app:showAsAction="never"/>
 </menu>

@@ -4,6 +4,7 @@ package com.danandfranz.filmtosee;
  * Created by Agilulfo on 19/02/2016.
  */
 
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -21,7 +22,9 @@ public class TwoFragment extends Fragment{
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+
     }
 
     @Override

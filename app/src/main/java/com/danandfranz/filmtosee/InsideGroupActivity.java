@@ -1,6 +1,12 @@
 package com.danandfranz.filmtosee;
 
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.ClipData;
+import android.support.v4.app.DialogFragment;
+import android.content.DialogInterface;
+import android.content.pm.ActivityInfo;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
@@ -46,8 +52,9 @@ public class InsideGroupActivity  extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inside_group);
-
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         //TOOLBAR
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarGroup);
         setSupportActionBar(toolbar);
         // Get a support ActionBar corresponding to this toolbar
@@ -81,7 +88,9 @@ public class InsideGroupActivity  extends AppCompatActivity {
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
         //end swipe
+
     }
+
 
     private FeatureCoverFlow.OnScrollPositionListener onScrollListener() {
         return new FeatureCoverFlow.OnScrollPositionListener() {
@@ -175,7 +184,7 @@ public class InsideGroupActivity  extends AppCompatActivity {
             return mFragmentTitleList.get(position);
         }
     }
-
     //END SWIPE
-}
 
+
+}
