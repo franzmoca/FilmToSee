@@ -13,6 +13,7 @@
     tools:context=".GroupsActivity"
     tools:showIn="@layout/app_bar_groups"
     android:background="@drawable/pattern_home"
+    android:tileMode="repeat"
     >
     <it.gmariotti.cardslib.library.recyclerview.view.CardRecyclerView
         android:layout_width="match_parent"
