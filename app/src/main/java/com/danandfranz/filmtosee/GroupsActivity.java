@@ -10,6 +10,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.InputType;
 import android.util.Log;
@@ -23,6 +24,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -311,13 +313,25 @@ public class GroupsActivity extends AppCompatActivity
                 .title("Create new Group")
                 .content("Name of the group")
                 .theme(Theme.LIGHT)
-                .inputType(InputType.TYPE_CLASS_TEXT)
                 .input("Choose a good name!", "", new MaterialDialog.InputCallback() {
                     @Override
                     public void onInput(MaterialDialog dialog, CharSequence input) {
                         // Do something
-                        Log.d(TAG, "call createGroupPost" + input.toString());
-                        createGroupPost(input.toString());
+                        if (input.toString().length() > 3) {
+                            Log.d(TAG, "call createGroupPost" + input.toString());
+                            createGroupPost(input.toString());
+                        } else {
+                            NavigationView rootlayout = (NavigationView) findViewById(R.id.nav_view);
+
+                            Snackbar.make(rootlayout, "Group nome has to be atleast 4 character long!", Snackbar.LENGTH_LONG)
+                                    .setAction("Close", new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            // Perform anything for the action selected
+                                        }
+                                    }).setDuration(Snackbar.LENGTH_LONG).show();
+
+                        }
                     }
                 }).show();
 
