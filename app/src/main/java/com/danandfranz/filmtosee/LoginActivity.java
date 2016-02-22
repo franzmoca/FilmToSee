@@ -45,6 +45,7 @@ public class LoginActivity extends AppCompatActivity  {
     private static final int REQUEST_SIGNUP = 0;
     // Session Manager Class
     SessionManager session;
+    public boolean loginWithEmail = true;
 
     // UI references.
     private ScrollView rootlayout;
@@ -151,9 +152,9 @@ public class LoginActivity extends AppCompatActivity  {
         moveTaskToBack(true);
     }
 
-    public void onLoginSuccess(String username, String rid) {
+    public void onLoginSuccess(String username, String rid, String mail) {
         //signInButton.setEnabled(true);
-        session.createLoginSession(username, mEmailView.getText().toString() ,rid);
+        session.createLoginSession(username, mail ,rid);
 
         Intent intent = new Intent(getApplicationContext(), GroupsActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); //makes sure that you cannot go back to the previous activity with the BACK button.
@@ -182,11 +183,16 @@ public class LoginActivity extends AppCompatActivity  {
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
 
-        if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            mEmailView.setError("enter a valid email address");
+        if (email.isEmpty()) {
+            mEmailView.setError("enter a valid email address or username");
             valid = false;
+        } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            //mEmailView.setError("enter a valid email address");
+            mEmailView.setError(null);
+            loginWithEmail = false;
         } else {
             mEmailView.setError(null);
+            loginWithEmail = true;
         }
 
         if (password.isEmpty() || password.length() < 4 || password.length() > 10) {
@@ -201,12 +207,20 @@ public class LoginActivity extends AppCompatActivity  {
 
 
     public Call getLogin(String mail,String pwd) throws JSONException{
+        String type;
         RequestBody body;
+        if(loginWithEmail == true){
+            type = "mail";
+        }else{
+            type = "user";
+        }
         body = new FormBody.Builder()
                 .add("get","login")
-                .add("email", mail)
+                .add("var", mail)
                 .add("password",pwd)
+                .add("type",type)
                 .build();
+
         try {
             return Util.post(body,client, new Callback() {
                 @Override public void onFailure(Call call, IOException e) {
@@ -226,7 +240,8 @@ public class LoginActivity extends AppCompatActivity  {
                         if (result.equalsIgnoreCase("success")) {
                             String rid = jsonObj.getString("id");
                             String username = jsonObj.getString("username");
-                            onLoginSuccess(username,rid);
+                            String mail = jsonObj.getString("mail");
+                            onLoginSuccess(username,rid,mail);
                         } else {
                             onLoginFailed();
                         }

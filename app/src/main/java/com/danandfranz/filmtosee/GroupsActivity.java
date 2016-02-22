@@ -101,7 +101,11 @@ public class GroupsActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                createNewGroup();
+                try {
+                    createNewGroup();
+                }catch (Exception e){
+                   // e.printStackTrace();
+                }
             }
         });
 
@@ -323,7 +327,7 @@ public class GroupsActivity extends AppCompatActivity
                         } else {
                             NavigationView rootlayout = (NavigationView) findViewById(R.id.nav_view);
 
-                            Snackbar.make(rootlayout, "Group nome has to be atleast 4 character long!", Snackbar.LENGTH_LONG)
+                            Snackbar.make(rootlayout, "Group name has to be atleast 4 character long!", Snackbar.LENGTH_LONG)
                                     .setAction("Close", new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {

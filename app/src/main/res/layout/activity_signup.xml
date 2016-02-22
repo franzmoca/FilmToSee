@@ -30,7 +30,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textCapWords"
-                android:hint="Name" />
+                android:hint="User" />
         </android.support.design.widget.TextInputLayout>
 
         <!-- Email Label -->
