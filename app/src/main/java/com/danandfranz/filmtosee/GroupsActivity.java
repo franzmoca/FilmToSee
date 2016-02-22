@@ -65,6 +65,9 @@ public class GroupsActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_groups);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        try{ getActionBar().setTitle("Groups");}catch (Exception e){} //Cambio nome  activity "in sicurezza"
+
         //CONTROLLO LOGIN
         session = new SessionManager(getApplicationContext());
         //Toast.makeText(getApplicationContext(), "User Login Status: " + session.isLoggedIn(), Toast.LENGTH_LONG).show();
@@ -295,6 +298,7 @@ public class GroupsActivity extends AppCompatActivity
         } else if (id == R.id.invite_friend) {
 
         } else if (id == R.id.settings) {
+
             Intent intent = new Intent(this, InsideGroupActivity.class);
             startActivity(intent);
 
