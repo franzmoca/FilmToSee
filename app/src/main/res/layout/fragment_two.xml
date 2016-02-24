@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.danandfranz.filmtosee.TwoFragment">
+    tools:context=".ChatActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -10,146 +10,30 @@
         android:background="#fff"
         android:id="@+id/layoutComments">
 
-
-
-        <ScrollView
+        <RelativeLayout
+            android:id="@+id/container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingRight="2dp"
-            android:paddingLeft="2dp"
-            android:id="@+id/scrollView" >
-            <RelativeLayout
+            android:orientation="vertical"
+            android:padding="20dp"
+            android:layout_above="@+id/insertCommentLayout">
+
+
+
+            <ListView
+                android:id="@+id/messagesContainer"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:weightSum="3"
-                    android:id="@+id/othersMsg"
-                    android:background="@color/iron"
-                    android:isScrollContainer="false">
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="false"
+                android:layout_alignParentTop="false"
+                android:listSelector="@android:color/transparent"
+                android:transcriptMode="alwaysScroll"
+                android:divider="@null" />
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/chatAvatar"
-                        android:layout_weight="2"
-                        android:src="@mipmap/ic_launcher" />
-
-                    <LinearLayout
-                        android:orientation="vertical"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingRight="3dp"
-                        android:layout_weight="0.2"
-                        android:paddingBottom="3dp">
-
-                        <LinearLayout
-                            android:orientation="vertical"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="left"
-
-                            >
-
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textAppearance="?android:attr/textAppearanceSmall"
-                                android:text="User"
-                                android:id="@+id/chatUsername"
-                                android:layout_weight="1" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:textAppearance="?android:attr/textAppearanceMedium"
-                                android:text="Oh yeahhhhhhhhhhhhhhhhh\nTomorrow!!! :D  :D :D :D :)"
-                                android:id="@+id/textView3"
-                                android:maxHeight="40dp"
-                                android:layout_weight="1" />
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:text="ore 15:23"
-                        android:id="@+id/chatOre"
-                        android:gravity="bottom"
-                        android:textSize="10dp"
-                        android:layout_gravity="bottom|right" />
-                </LinearLayout>
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:weightSum="3"
-                    android:background="#e1f7fd"
-                    android:isScrollContainer="false"
-                    android:layout_below="@+id/othersMsg"
-                    android:layout_marginTop="4dp"
-                    android:paddingBottom="4dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:text="ore 15:23"
-                        android:id="@+id/chatMyOre"
-                        android:gravity="bottom"
-                        android:textSize="10dp"
-                        android:layout_gravity="bottom|left" />
-
-                    <LinearLayout
-                        android:orientation="vertical"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="left"
-
-                        android:layout_weight="0.2">
-
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="?android:attr/textAppearanceSmall"
-                            android:text="User"
-                            android:id="@+id/chatMyUsername"
-                            android:layout_weight="1"
-                            android:layout_gravity="right" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:text="That&apos;s cool man fsfsfsdfsfsdfdssd \ndadasd"
-                            android:id="@+id/textMyView3"
-                            android:maxHeight="40dp"
-                            android:layout_weight="1"
-                            android:gravity="right" />
-                    </LinearLayout>
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/chatMyAvatar"
-                        android:layout_weight="2"
-                        android:src="@mipmap/ic_launcher" />
-                </LinearLayout>
-
-            </RelativeLayout>
+        </RelativeLayout>
 
 
 
-
-
-
-        </ScrollView>
 
         <LinearLayout
             android:orientation="horizontal"
@@ -159,7 +43,8 @@
             android:layout_alignParentBottom="true"
             android:weightSum="2"
             android:focusable="true"
-            android:focusableInTouchMode="true">
+            android:focusableInTouchMode="true"
+            android:id="@+id/insertCommentLayout">
 
 
             <android.support.design.widget.TextInputLayout
@@ -184,15 +69,30 @@
                     android:isScrollContainer="true" />
             </android.support.design.widget.TextInputLayout>
 
-            <Button
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:layout_width="35dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/sendBtn"
+                android:layout_weight="0.5"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="5dp"
+                android:layout_marginRight="3dp">
 
-                android:background="@drawable/ic_send_24dp"
-                android:layout_gravity="bottom|right"
-                android:layout_weight="0.2" />
+                <Button
+                    android:layout_width="35dp"
+                    android:layout_height="30dp"
+                    android:id="@+id/sendBtn"
+
+                    android:background="@drawable/ic_send_24dp"
+                    android:layout_weight="0.2"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentBottom="false"
+                    android:layout_alignWithParentIfMissing="false" />
+            </RelativeLayout>
+
+
+
         </LinearLayout>
+
     </RelativeLayout>
 
 </RelativeLayout>
