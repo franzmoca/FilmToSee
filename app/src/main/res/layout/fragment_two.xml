@@ -42,10 +42,10 @@
             android:background="@color/primary"
             android:layout_alignParentBottom="true"
             android:weightSum="2"
-
             android:id="@+id/insertCommentLayout"
 
           >
+
 
 
             <Button
@@ -98,7 +98,6 @@
                     android:layout_alignParentBottom="false"
                     android:layout_alignWithParentIfMissing="false" />
             </RelativeLayout>
-
 
 
         </LinearLayout>
