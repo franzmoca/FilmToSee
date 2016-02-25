@@ -18,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -80,7 +81,6 @@ public class TwoFragment extends Fragment{
                 RelativeLayout r = (RelativeLayout) getActivity().findViewById(R.id.relativeLayout);
                 r.setVisibility(View.GONE);
                 t.setVisibility(View.GONE);
-                BoolForBackButton=true;
                 return false;
             }
 
@@ -97,7 +97,8 @@ public class TwoFragment extends Fragment{
                     RelativeLayout r = (RelativeLayout) getActivity().findViewById(R.id.relativeLayout);
                     r.setVisibility(View.VISIBLE);
                     t.setVisibility(View.VISIBLE);
-                    BoolForBackButton=false;
+
+
                     return true;
                 }
                 /* PER ANDARE INDIETRO
@@ -122,6 +123,8 @@ public class TwoFragment extends Fragment{
                 RelativeLayout r = (RelativeLayout) getActivity().findViewById(R.id.relativeLayout);
                 r.setVisibility(View.VISIBLE);
                 t.setVisibility(View.VISIBLE);
+
+                 view.findViewById(R.id.insertText).clearFocus();
 
             }
         });

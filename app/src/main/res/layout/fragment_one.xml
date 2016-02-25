@@ -16,30 +16,90 @@
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:weightSum="2"
             android:id="@+id/firstRaw"
             android:transitionGroup="false"
             android:paddingTop="0dp">
 
 
-            <Button
+            <LinearLayout
+                android:orientation="horizontal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Like"
-                android:id="@+id/button"
-                android:layout_weight="0.5"
-                android:gravity="left"
-                android:textAlignment="center"
-                 />
+                android:baselineAligned="false">
 
-            <TextView
-                android:layout_width="wrap_content"
+                <Button
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:id="@+id/buttonLike"
+                    android:layout_weight="0"
+                    android:gravity="left"
+                    android:textAlignment="center"
+                    android:background="@drawable/thumbs_up"
+                    android:layout_margin="5dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="0"
+                    android:id="@+id/textLikes"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="20dp"
+                    android:textStyle="bold"
+                    android:layout_marginRight="5dp"
+                    android:textColor="#9059A0" />
+
+                <Button
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:id="@+id/buttonUnlike"
+                    android:background="@drawable/thumbs_down"
+                    android:layout_weight="0"
+                    android:layout_margin="5dp"
+                    android:layout_marginLeft="5dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="0"
+                    android:id="@+id/textUnlikes"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="20dp"
+                    android:textStyle="bold"
+                    android:layout_marginRight="5dp"
+                    android:textColor="#FFD600" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="imdb\n8,9"
-                android:id="@+id/textView"
-                android:layout_weight="1.5"
-                android:textAlignment="textEnd" />
+                android:gravity="right">
+
+                <ImageView
+                    android:layout_width="70dp"
+                    android:layout_height="30dp"
+                    android:id="@+id/imageView2"
+                    android:background="@drawable/imdb"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginRight="5dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="@string/imdb_rating"
+                    android:id="@+id/textView"
+                    android:layout_weight="1.5"
+                    android:textAlignment="textEnd"
+                    android:textColor="#ddab18"
+                    android:textStyle="bold"
+                    android:layout_marginRight="6dp"
+                    android:textColorHighlight="#ba8d0a" />
+
+            </LinearLayout>
+
         </LinearLayout>
 
         <LinearLayout

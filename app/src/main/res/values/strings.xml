@@ -33,4 +33,5 @@
     <string name="btnComments">Comments</string>
     <string name="REMOVE" />
     <string name="CANCEL" />
+    <string name="imdb_rating">8,9</string>
 </resources>

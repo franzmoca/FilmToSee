@@ -1,7 +1,12 @@
 package com.danandfranz.filmtosee;
 
 
+import android.app.Dialog;
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
@@ -12,9 +17,25 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.PopupWindow;
+import android.widget.TextView;
+
+
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.afollestad.materialdialogs.Theme;
+import com.rockerhieu.emojicon.*;
+import com.rockerhieu.emojicon.EmojiconsFragment;
+import com.rockerhieu.emojicon.emoji.Emojicon;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,14 +79,14 @@ public class InsideGroupActivity  extends AppCompatActivity {
             @Override
             public void run() {
 
-        //COVER FLOW
-        coverFlow = (FeatureCoverFlow) findViewById(R.id.coverflow);
+                //COVER FLOW
+                coverFlow = (FeatureCoverFlow) findViewById(R.id.coverflow);
 
-        settingDummyData();
-        adapter = new CoverFlowAdapter(InsideGroupActivity.this, films);
-        coverFlow.setAdapter(adapter);
-        coverFlow.setOnScrollPositionListener(onScrollListener());
-        //END OF COVER FLOW
+                settingDummyData();
+                adapter = new CoverFlowAdapter(InsideGroupActivity.this, films);
+                coverFlow.setAdapter(adapter);
+                coverFlow.setOnScrollPositionListener(onScrollListener());
+                //END OF COVER FLOW
 
 
             }
@@ -85,8 +106,8 @@ public class InsideGroupActivity  extends AppCompatActivity {
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
         //end swipe
-
     }
+
 
 
     private FeatureCoverFlow.OnScrollPositionListener onScrollListener() {
@@ -115,6 +136,8 @@ public class InsideGroupActivity  extends AppCompatActivity {
         films.add(new Film(R.mipmap.the_witcher_3, "The Witcher 3"));
         films.add(new Film(R.mipmap.tomb_raider, "Tom raider 3"));
         films.add(new Film(R.mipmap.need_for_speed_most_wanted, "Need for Speed Most Wanted"));
+        films.add(new Film(R.mipmap.addfilmcover, "Add Movie"));
+
     }
 
 
@@ -126,10 +149,18 @@ public class InsideGroupActivity  extends AppCompatActivity {
                 return true;
 
             case R.id.addUserGroup:
-                // User chose the "Favorite" action, mark the current item
-                // as a favorite...
+                addMember();
                 return true;
 
+
+            case R.id.membri_gruppo:
+
+               Intent intent = new Intent(this, MembersGroup.class);
+                startActivity(intent);
+                return true;
+            case R.id.lascia_gruppo:
+                LeaveGroup();
+                return true;
             default:
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.
@@ -183,5 +214,40 @@ public class InsideGroupActivity  extends AppCompatActivity {
     }
     //END SWIPE
 
+    private void addMember() {
 
+        new MaterialDialog.Builder(this)
+                .title("Add Member")
+                .content("Please insert the username of the user you want to add")
+                .theme(Theme.LIGHT)
+                .positiveText("Add Member")
+                .input("Username", "", new MaterialDialog.InputCallback() {
+                    @Override
+                    public void onInput(MaterialDialog dialog, CharSequence input) {
+                        // Do something
+                        if (input.toString().length() > 3) {
+
+
+                        } else {
+
+
+
+                        }
+                    }
+                }).show();
+
+    }
+
+    private void LeaveGroup() {
+
+        new MaterialDialog.Builder(this)
+                .title("Confirm?")
+                .content("Are you sure you want to leave and delete this Group?")
+                .theme(Theme.LIGHT)
+                .positiveText("Yes")
+                .negativeText("Cancel")
+                .icon(this.getResources().getDrawable(R.drawable.ic_delete_24dp))
+                .show();
+
+    }
 }

@@ -4,12 +4,12 @@
     android:id="@+id/actionBarGroup">
 
     <item
-        android:id="@+id/addUserGroup"
+        android:id="@+id/addFilmGroup"
         android:icon="@drawable/ic_add_circle_24dp"
         android:title="Add Film"
         app:showAsAction="ifRoom"/>
     <item
-        android:id="@+id/addFilmGroup"
+        android:id="@+id/addUserGroup"
         android:icon="@drawable/ic_groups_white"
         android:title="Add Member"
         app:showAsAction="ifRoom"/>

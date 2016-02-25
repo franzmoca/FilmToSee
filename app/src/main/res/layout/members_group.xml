@@ -1,9 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/barTopMembersGroup"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbarMembersGroup"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <ScrollView
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:fitsSystemWindows="true"
-    android:clickable="false">
+    android:clickable="false"
+        android:layout_below="@+id/barTopMembersGroup"
+        android:background="#ffffff">
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical" android:layout_width="match_parent"
         android:layout_height="fill_parent"
@@ -21,42 +44,74 @@
                 android:weightSum="3"
                 android:background="#ffffff">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="Sounds and Notifications"
-                    android:id="@+id/textView2"
-                    android:textColor="#7b7b7b"
-                    android:layout_marginLeft="50dp"
-                    android:layout_marginTop="20dp"
-                    android:textSize="20dp"
-                    android:clickable="true" />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:longClickable="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="Add Member"
-                    android:id="@+id/textView4"
-                    android:textColor="#7b7b7b"
-                    android:layout_marginLeft="50dp"
-                    android:layout_marginTop="20dp"
-                    android:textSize="20dp"
-                    android:clickable="true" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="Rename Group"
-                    android:id="@+id/textView5"
-                    android:textColor="#7b7b7b"
-                    android:layout_marginLeft="50dp"
-                    android:layout_marginTop="20dp"
-                    android:textSize="20dp"
-                    android:clickable="true"
-                    android:layout_marginBottom="20dp" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#140135"
+                        android:id="@+id/textSoundandNot"
+                        android:layout_marginLeft="50dp"
+                        android:textSize="17dp"
+                        android:text="Sounds and Notifications"
+
+                        />
+
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:longClickable="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false">
+
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#140135"
+                        android:id="@+id/textAddMember"
+                        android:layout_marginLeft="50dp"
+                        android:textSize="17dp"
+                        android:text="Add Member"
+                        />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:longClickable="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#140135"
+                        android:id="@+id/textRenameGroup"
+                        android:layout_marginLeft="50dp"
+                        android:textSize="17dp"
+                        android:text="Rename Group"
+
+                        />
+
+                </RelativeLayout>
+
             </LinearLayout>
         </RelativeLayout>
 
@@ -95,14 +150,14 @@
                     android:layout_alignParentRight="true"
                     android:layout_alignParentEnd="false"
                     android:layout_weight="1"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp">
 
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/imageView3"
-                        android:src="@mipmap/ic_launcher"
+                        android:src="@mipmap/ic_launcher_app"
                         android:layout_centerVertical="true" />
 
                     <TextView
@@ -128,52 +183,18 @@
 
                 </RelativeLayout>
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_weight="1"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginBottom="10dp">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/imageView2"
-                        android:src="@mipmap/ic_launcher"
-                        android:layout_centerVertical="true" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:text="Agilulfo"
-                        android:id="@+id/textView6"
-                        android:layout_marginLeft="5dp"
-                        android:layout_toRightOf="@+id/imageView2"
-                        android:layout_centerVertical="true" />
-
-                    <CheckBox
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Admin"
-                        android:id="@+id/checkBox"
-                        android:layout_centerVertical="true"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="false"
-                        android:layout_marginRight="10dp"
-                        android:buttonTint="#6238ad"
-                        android:checked="false" />
-
-                </RelativeLayout>
-
 
             </LinearLayout>
 
         </RelativeLayout>
 
+        <android.support.v7.widget.Toolbar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/view" />
 
 
     </LinearLayout>
 </ScrollView>
+
+</RelativeLayout>
