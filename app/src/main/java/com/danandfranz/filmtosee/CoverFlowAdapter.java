@@ -1,5 +1,6 @@
 package com.danandfranz.filmtosee;
 
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
@@ -92,7 +93,7 @@ public class CoverFlowAdapter extends BaseAdapter {
                                 .theme(Theme.LIGHT)
                                 .positiveText("Yes")
                                 .negativeText("Cancel")
-                                .icon(activity.getResources().getDrawable(R.drawable.ic_delete_24dp))
+                                .icon(ContextCompat.getDrawable(activity, R.drawable.ic_delete_24dp))
                                 .show();
 
                     }

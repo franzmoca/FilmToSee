@@ -22,7 +22,7 @@
         android:title="Add Member"
         app:showAsAction="never"/>
     <item android:id="@+id/silenzia_notifiche"
-        android:title="Silince Notifications"
+        android:title="Silence Notifications"
         app:showAsAction="never"/>
     <item android:id="@+id/lascia_gruppo"
         android:title="Delete and Leave Group"

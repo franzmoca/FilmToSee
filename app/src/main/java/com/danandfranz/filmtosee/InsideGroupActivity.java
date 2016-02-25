@@ -1,12 +1,16 @@
 package com.danandfranz.filmtosee;
 
 
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.ClipData;
+import android.content.Intent;
+import android.net.Uri;
+import android.support.v4.app.DialogFragment;
+import android.content.DialogInterface;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
@@ -17,7 +21,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -29,7 +32,15 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.view.ViewTreeObserver;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
+
+import java.lang.reflect.Field;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
@@ -40,16 +51,25 @@ import com.rockerhieu.emojicon.emoji.Emojicon;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.danandfranz.filmtosee.R;
+import com.danandfranz.filmtosee.OneFragment;
+import com.danandfranz.filmtosee.TwoFragment;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import it.moondroid.coverflow.components.ui.containers.FeatureCoverFlow;
 
 
 
 public class InsideGroupActivity  extends AppCompatActivity {
 
+    private static final String TAG = "InsideGroupActivity" ;
 
     private FeatureCoverFlow coverFlow;
     private CoverFlowAdapter adapter;
     private ArrayList<Film> films;
+    public JSONObject groupData;
 
 
     //SWIPE
@@ -63,6 +83,13 @@ public class InsideGroupActivity  extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inside_group);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        try {
+            groupData = new JSONObject(getIntent().getStringExtra("json"));
+                  //setSubtitle(groupData.getJSONArray("members").length() + " members.");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         //TOOLBAR
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarGroup);
@@ -72,6 +99,28 @@ public class InsideGroupActivity  extends AppCompatActivity {
 
         // Enable the Up button
         ab.setDisplayHomeAsUpEnabled(true);
+        try {
+            ab.setTitle(groupData.getString("name"));
+            ab.setSubtitle(groupData.getJSONArray("members").length()+" members");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            Field titleField = Toolbar.class.getDeclaredField("mSubtitleTextView");
+            titleField.setAccessible(true);
+            final TextView barTitleView = (TextView) titleField.get(toolbar);
+            barTitleView.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    Log.d(TAG,"ciao");
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
 
         //END OF TOOLBAR SETTINGS
 
@@ -144,9 +193,7 @@ public class InsideGroupActivity  extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_settings:
-                // User chose the "Settings" item, show the app settings UI...
-                return true;
+
 
             case R.id.addUserGroup:
                 addMember();

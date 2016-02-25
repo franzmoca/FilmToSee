@@ -1,6 +1,13 @@
 package com.danandfranz.filmtosee;
 
+import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.util.Log;
+import android.view.View;
+
 import java.io.IOException;
+import java.lang.reflect.Field;
 
 import okhttp3.Call;
 import okhttp3.Callback;

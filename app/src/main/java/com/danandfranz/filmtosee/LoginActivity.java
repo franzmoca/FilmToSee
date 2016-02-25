@@ -107,7 +107,6 @@ public class LoginActivity extends AppCompatActivity  {
         final String password = mPasswordView.getText().toString();
 
         client = new OkHttpClient();
-        // TODO: Implement your own authentication logic here.
 
         Call newcall = getLogin(email, password);
         signInButton.setEnabled(true);

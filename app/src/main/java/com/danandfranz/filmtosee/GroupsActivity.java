@@ -66,7 +66,7 @@ public class GroupsActivity extends AppCompatActivity
         setContentView(R.layout.activity_groups);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        try{ getActionBar().setTitle("Groups");}catch (Exception e){} //Cambio nome  activity "in sicurezza"
+       // try{ getActionBar().setTitle("Groups");}catch (Exception e){} //Cambio nome  activity "in sicurezza"
 
         //CONTROLLO LOGIN
         session = new SessionManager(getApplicationContext());
@@ -186,7 +186,7 @@ public class GroupsActivity extends AppCompatActivity
 
             String name = groups.getJSONObject(i).getString("name");
             JSONArray members = groups.getJSONObject(i).getJSONArray("members");
-            cards.add(createCard(name,groups.getJSONObject(i).getJSONArray("members")));
+            cards.add(createCard(name,groups.getJSONObject(i)));
         }
 
         CardArrayRecyclerViewAdapter mCardArrayAdapter = new CardArrayRecyclerViewAdapter(this, cards);
@@ -201,10 +201,11 @@ public class GroupsActivity extends AppCompatActivity
             //mCardArrayAdapter.notifyDataSetChanged();
         }
     }
-    private Card createCard(String groupName,JSONArray members) throws JSONException {
+    private Card createCard(String groupName, final JSONObject group) throws JSONException {
         //Create a Card
         Card card = new Card(this);
         String memstr = "";
+        JSONArray members = group.getJSONArray("members");
         for ( int z = 0;z<members.length();z++){
             memstr+=" "+members.getString(z)+" ";
         }
@@ -222,6 +223,7 @@ public class GroupsActivity extends AppCompatActivity
             public void onClick(Card card, View view) {
                 Toast.makeText(GroupsActivity.this, "Click Listener card=" + card.getCardHeader().getTitle(), Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(GroupsActivity.this, InsideGroupActivity.class);
+                intent.putExtra("json",group.toString());
                 startActivity(intent);
 
             }
@@ -265,27 +267,6 @@ public class GroupsActivity extends AppCompatActivity
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.groups, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -298,9 +279,9 @@ public class GroupsActivity extends AppCompatActivity
         } else if (id == R.id.invite_friend) {
 
         } else if (id == R.id.settings) {
-
+/*
             Intent intent = new Intent(this, InsideGroupActivity.class);
-            startActivity(intent);
+            startActivity(intent);*/
 
         } else if (id == R.id.faq) {
             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://normandy.dmi.unipg.it/blockchainvis/Film/faq.html"));
