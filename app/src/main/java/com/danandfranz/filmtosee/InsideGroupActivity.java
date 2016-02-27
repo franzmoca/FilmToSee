@@ -138,7 +138,7 @@ public class InsideGroupActivity  extends AppCompatActivity {
 
         try {
             rid = groupData.getString("rid");
-            //progressDialog.show();
+            progressDialog.show();
             getFilmJsonByGroup(rid);
         }catch (Exception e){
             e.printStackTrace();
@@ -167,6 +167,7 @@ public class InsideGroupActivity  extends AppCompatActivity {
 
     private void settingFilmData(JSONArray jsonObj) throws JSONException {
         films = new ArrayList<>();
+        films.add(new Film()); //Aggiungo Film Vuoto
         for(int i = 0;i<jsonObj.length();i++){
             films.add(new Film(jsonObj.getJSONObject(i)));
         }
@@ -192,7 +193,7 @@ public class InsideGroupActivity  extends AppCompatActivity {
                 coverFlow.setAdapter(coverFlowAdapter);
                 coverFlow.setOnScrollPositionListener(onScrollListener());
                 //END OF COVER FLOW
-
+                progressDialog.hide();
 
             }
         });
@@ -204,14 +205,18 @@ public class InsideGroupActivity  extends AppCompatActivity {
         switch (item.getItemId()) {
 
 
+
             case R.id.addUserGroup:
                 addMember();
                 return true;
 
+            case R.id.aggiungi_membro:
+                addMember();
+                return true;
 
             case R.id.membri_gruppo:
 
-               Intent intent = new Intent(this, MembersGroup.class);
+                Intent intent = new Intent(this, MembersGroup.class);
                 startActivity(intent);
                 return true;
             case R.id.lascia_gruppo:
@@ -328,9 +333,8 @@ public class InsideGroupActivity  extends AppCompatActivity {
                     Log.d(TAG,json);
                     JSONArray jsonObj = new JSONArray(json);
 
-                    if (jsonObj.length()>0) {
+                    if (jsonObj.length()>= 0) {
                         settingFilmData(jsonObj);
-                       // progressDialog.hide();
 
                     } else {
                         //progressDialog.hide();

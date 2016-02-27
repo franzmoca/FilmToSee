@@ -37,7 +37,7 @@
             <Switch
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Sow it!"
+                android:text="Saw it!"
                 android:id="@+id/switch1"
                 android:layout_weight="1"
                 android:textColor="#683cb8"

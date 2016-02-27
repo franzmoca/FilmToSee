@@ -7,6 +7,7 @@ package com.danandfranz.filmtosee;
 
         import android.os.Bundle;
         import android.support.v4.app.Fragment;
+        import android.util.Log;
         import android.view.LayoutInflater;
         import android.view.View;
         import android.view.ViewGroup;
@@ -29,7 +30,7 @@ public class OneFragment extends Fragment{
     private TextView actors;
     private TextView plot;
     private TextView imdbVote;
-
+    private String TAG = "OneFragment";
 
 
     public OneFragment() {
@@ -93,6 +94,7 @@ public class OneFragment extends Fragment{
 
     public void setMovieDetails(Film film){
 
+
         title.setText(film.getTitle());
         director.setText(film.getDirector());
         writer.setText(film.getWriter());
@@ -102,6 +104,22 @@ public class OneFragment extends Fragment{
         actors.setText(film.getActors());
         plot.setText(film.getPlot());
         imdbVote.setText(film.getImdbScore());
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        //Fix Crash
+        textViewLike = (TextView) InputFragmentView.findViewById(R.id.textLikes);
+        textViewUnlike = (TextView) InputFragmentView.findViewById(R.id.textUnlikes);
+        title = (TextView) InputFragmentView.findViewById(R.id.title);
+        director = (TextView) InputFragmentView.findViewById(R.id.director);
+        writer = (TextView) InputFragmentView.findViewById(R.id.writer);
+        year = (TextView) InputFragmentView.findViewById(R.id.year);
+        genre = (TextView) InputFragmentView.findViewById(R.id.genre);
+        runtime = (TextView) InputFragmentView.findViewById(R.id.runtime);
+        actors = (TextView) InputFragmentView.findViewById(R.id.actors);
+        plot = (TextView) InputFragmentView.findViewById(R.id.plot);
+        imdbVote = (TextView) InputFragmentView.findViewById(R.id.imdbVote);
     }
 
 
