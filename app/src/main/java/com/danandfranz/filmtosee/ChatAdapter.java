@@ -104,6 +104,10 @@ public class ChatAdapter extends BaseAdapter {
             layoutParams.gravity = Gravity.RIGHT;
             holder.txtInfo.setLayoutParams(layoutParams);
 
+            layoutParams = (LinearLayout.LayoutParams) holder.user_username.getLayoutParams();
+            layoutParams.gravity = Gravity.RIGHT;
+            holder.user_username.setLayoutParams(layoutParams);
+
 
         } else {
             holder.contentWithBG.setBackgroundResource(R.drawable.out_message_bg);
@@ -132,6 +136,11 @@ public class ChatAdapter extends BaseAdapter {
             holder.userAvatar.setLayoutParams(layoutParams);
 
 
+            layoutParams = (LinearLayout.LayoutParams) holder.user_username.getLayoutParams();
+            holder.user_username.setVisibility(View.GONE);
+            holder.user_username.setLayoutParams(layoutParams);
+
+
 
         }
     }
@@ -143,6 +152,7 @@ public class ChatAdapter extends BaseAdapter {
         holder.contentWithBG = (LinearLayout) v.findViewById(R.id.contentWithBackground);
         holder.txtInfo = (TextView) v.findViewById(R.id.txtInfo);
         holder.userAvatar=(ImageView) v.findViewById(R.id.userAvatar);
+        holder.user_username=(TextView) v.findViewById(R.id.user_username);
         return holder;
     }
 
@@ -152,5 +162,6 @@ public class ChatAdapter extends BaseAdapter {
         public LinearLayout content;
         public LinearLayout contentWithBG;
         public ImageView userAvatar;
+        public TextView user_username;
     }
 }

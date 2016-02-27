@@ -15,20 +15,27 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:padding="20dp"
-            android:layout_above="@+id/insertCommentLayout">
+            android:layout_above="@+id/insertCommentLayout"
+            android:paddingRight="10dp"
+            android:paddingLeft="10dp"
+            android:paddingTop="3dp"
+            android:paddingBottom="2dp">
 
 
 
             <ListView
+                android:foreground="@null"
                 android:id="@+id/messagesContainer"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_alignParentLeft="false"
-                android:layout_alignParentTop="false"
-                android:listSelector="@android:color/transparent"
                 android:transcriptMode="alwaysScroll"
-                android:divider="@null" />
+                android:divider="@null"
+                android:contextClickable="false"
+                android:footerDividersEnabled="false"
+                android:fastScrollAlwaysVisible="false"
+                android:fastScrollEnabled="false"
+                android:headerDividersEnabled="false"
+                android:listSelector="@android:color/transparent" />
 
 
         </RelativeLayout>
@@ -42,10 +49,10 @@
             android:background="@color/primary"
             android:layout_alignParentBottom="true"
             android:weightSum="2"
-
             android:id="@+id/insertCommentLayout"
 
           >
+
 
 
             <Button
@@ -98,7 +105,6 @@
                     android:layout_alignParentBottom="false"
                     android:layout_alignWithParentIfMissing="false" />
             </RelativeLayout>
-
 
 
         </LinearLayout>
