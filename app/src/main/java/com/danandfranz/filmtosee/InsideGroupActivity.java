@@ -102,17 +102,29 @@ public class InsideGroupActivity  extends AppCompatActivity {
             e.printStackTrace();
         }
         try {
-            Field titleField = Toolbar.class.getDeclaredField("mSubtitleTextView");
-            titleField.setAccessible(true);
-            final TextView barTitleView = (TextView) titleField.get(toolbar);
-            barTitleView.setOnClickListener(new View.OnClickListener() {
+            ///TOOLBAR PER MEMBERLIST
+            View.OnClickListener members =new View.OnClickListener() {
 
                 @Override
                 public void onClick(View v) {
-                    Log.d(TAG,"ciao");
-                }
-            });
+                    try {
+                        memberList();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
 
+                }
+            };
+            Field subTitle = Toolbar.class.getDeclaredField("mSubtitleTextView");
+            subTitle.setAccessible(true);
+            final TextView barTitleView = (TextView) subTitle.get(toolbar);
+            barTitleView.setOnClickListener(members);
+
+            Field title = Toolbar.class.getDeclaredField("mTitleTextView");
+            title.setAccessible(true);
+            final TextView titleView = (TextView) title.get(toolbar);
+            titleView.setOnClickListener(members);
+            ///FINE TOOLBAR PER MEMBERLIST
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -155,6 +167,12 @@ public class InsideGroupActivity  extends AppCompatActivity {
             {
                 Log.v(TAG, "position: " + position);
                 Film film = coverFlowAdapter.getItem(position);
+                if(film.isAdd()){
+                    tabLayout.setVisibility(View.INVISIBLE);
+                }else{
+                    tabLayout.setVisibility(View.VISIBLE);
+
+                }
                 OneFragment one = (OneFragment) fragmentAdapter.getItem(0);
                 one.setMovieDetails(film);
             }
@@ -215,9 +233,12 @@ public class InsideGroupActivity  extends AppCompatActivity {
                 return true;
 
             case R.id.membri_gruppo:
+                try {
+                    memberList();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
-                Intent intent = new Intent(this, MembersGroup.class);
-                startActivity(intent);
                 return true;
             case R.id.lascia_gruppo:
                 LeaveGroup();
@@ -237,10 +258,16 @@ public class InsideGroupActivity  extends AppCompatActivity {
         return true;
     }
 
+    public void memberList() throws JSONException {
+        Intent intent = new Intent(this, MembersGroup.class);
+        intent.putExtra("json", groupData.toString());
+        startActivity(intent);
+
+    }
     //SWIPE
     private void setupViewPager(ViewPager viewPager) {
         fragmentAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-        fragmentAdapter.addFragment(new OneFragment(), "MOVIE DETAILES");
+        fragmentAdapter.addFragment(new OneFragment(), "MOVIE DETAILS");
         fragmentAdapter.addFragment(new TwoFragment(), "COMMENTS");
         viewPager.setAdapter(fragmentAdapter);
     }
@@ -248,11 +275,9 @@ public class InsideGroupActivity  extends AppCompatActivity {
     class ViewPagerAdapter extends FragmentPagerAdapter {
         private final List<Fragment> mFragmentList = new ArrayList<>();
         private final List<String> mFragmentTitleList = new ArrayList<>();
-        public final FragmentManager manager;
 
         public ViewPagerAdapter(FragmentManager manager) {
             super(manager);
-            this.manager = manager;
         }
 
         @Override

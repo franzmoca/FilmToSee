@@ -229,7 +229,6 @@ public class GroupsActivity extends AppCompatActivity
         card.setOnClickListener(new Card.OnCardClickListener() {
             @Override
             public void onClick(Card card, View view) {
-                Toast.makeText(GroupsActivity.this, "Click Listener card=" + card.getCardHeader().getTitle(), Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(GroupsActivity.this, InsideGroupActivity.class);
                 intent.putExtra("json",group.toString());
                 startActivity(intent);

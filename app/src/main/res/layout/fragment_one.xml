@@ -7,10 +7,15 @@
     android:paddingLeft="3dp"
     android:paddingRight="3dp"
     android:id="@+id/scrollDetailes">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/totalcontainer">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:id="@+id/RelativeFilmDetails">
 
         <LinearLayout
             android:orientation="horizontal"
@@ -327,4 +332,46 @@
                 android:textSize="17dp" />
         </LinearLayout>
     </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/RelativeAddFilm"
+        android:visibility="gone">
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/text_search_box"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.0"
+                    android:gravity="center" />
+
+                <Button
+                    android:id="@+id/button_search"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableRight="@android:drawable/ic_search_category_default" />
+            </LinearLayout>
+
+            <ListView
+                android:id="@+id/list_movies"
+                android:layout_width="match_parent"
+                android:layout_height="0dip"
+                android:layout_weight="1.0" />
+
+        </LinearLayout>
+
+        </RelativeLayout>
+    </RelativeLayout>
+
 </ScrollView>

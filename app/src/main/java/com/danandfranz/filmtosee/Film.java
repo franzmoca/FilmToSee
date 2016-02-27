@@ -19,6 +19,7 @@ public class Film {
     private String imdbID;
     private int like;
     private int dislike;
+    private boolean add;
 
 
 
@@ -27,6 +28,7 @@ public class Film {
     public Film() {
         this.title = "Add Film";
         this.imageLink = "assets://addfilmcover.png";
+        this.add = true;
     }
 
     public Film(JSONObject filmJson){
@@ -42,6 +44,7 @@ public class Film {
             imdbScore  =filmJson.getString("imdbRating");
             imdbID=filmJson.getString("imdbID");
             imageLink = filmJson.getString("Poster");
+            this.add = false;
         }catch (Exception e) {
             e.printStackTrace();
         }
@@ -146,5 +149,9 @@ public class Film {
 
     public void setDislike(int dislike) {
         this.dislike = dislike;
+    }
+
+    public boolean isAdd() {
+        return add;
     }
 }

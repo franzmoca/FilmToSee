@@ -10,9 +10,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 
 
 public class MembersGroup extends AppCompatActivity {
+    JSONObject groupData;
 
 
 
@@ -23,9 +26,15 @@ public class MembersGroup extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.members_group);
 
+        try {
+            groupData = new JSONObject(getIntent().getStringExtra("json"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         //TOOLBAR
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarMembersGroup);
@@ -35,6 +44,13 @@ public class MembersGroup extends AppCompatActivity {
 
         // Enable the Up button
         ab.setDisplayHomeAsUpEnabled(true);
+
+        try {
+            ab.setTitle(groupData.getString("name"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
 
         //END OF TOOLBAR SETTINGS
 

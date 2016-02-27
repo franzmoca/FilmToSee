@@ -55,7 +55,9 @@ public class CoverFlowAdapter extends BaseAdapter {
                 //.diskCacheExtraOptions(1024, 1024, null)
                 .diskCacheFileNameGenerator(new HashCodeFileNameGenerator())
                 .build();
-        imageLoader.init(config);
+        if(!imageLoader.isInited()) {
+            imageLoader.init(config);
+        }
         options = new DisplayImageOptions.Builder()
                 .showImageOnLoading(R.drawable.ic_launcher)
                 .cacheInMemory(true)
@@ -113,34 +115,38 @@ public class CoverFlowAdapter extends BaseAdapter {
 
             @Override
             public void onClick(View v) {
-                final Dialog dialog = new Dialog(activity);
-                dialog.setContentView(R.layout.dialog_game_info);
-                dialog.setCancelable(true); // dimiss when touching outside
-                //dialog.setTitle("Film Details");
+                if (!getItem(position).isAdd()) {
+                    final Dialog dialog = new Dialog(activity);
+                    dialog.setContentView(R.layout.dialog_game_info);
+                    dialog.setCancelable(true); // dimiss when touching outside
+                    //dialog.setTitle("Film Details");
 
-                TextView text = (TextView) dialog.findViewById(R.id.name);
-                text.setText(getItem(position).getTitle());
-                ImageView image = (ImageView) dialog.findViewById(R.id.image);
-                display(image, data.get(position).getImageLink() );
-                //image.setImageResource(getItem(position).getImageSource());
-                Button delete = (Button) dialog.findViewById(R.id.removeFilm);
-                delete.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.hide();
-                        new MaterialDialog.Builder(activity)
-                                .title("Confim?")
-                                .content("Are you sure you want to remove " + getItem(position).getTitle() + " from this group?")
-                                .theme(Theme.LIGHT)
-                                .positiveText("Yes")
-                                .negativeText("Cancel")
-                                .icon(ContextCompat.getDrawable(activity, R.drawable.ic_delete_24dp))
-                                .show();
+                    TextView text = (TextView) dialog.findViewById(R.id.name);
+                    text.setText(getItem(position).getTitle());
+                    ImageView image = (ImageView) dialog.findViewById(R.id.image);
+                    display(image, data.get(position).getImageLink());
+                    //image.setImageResource(getItem(position).getImageSource());
+                    Button delete = (Button) dialog.findViewById(R.id.removeFilm);
+                    delete.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog.hide();
+                            new MaterialDialog.Builder(activity)
+                                    .title("Confim?")
+                                    .content("Are you sure you want to remove " + getItem(position).getTitle() + " from this group?")
+                                    .theme(Theme.LIGHT)
+                                    .positiveText("Yes")
+                                    .negativeText("Cancel")
+                                    .icon(ContextCompat.getDrawable(activity, R.drawable.ic_delete_24dp))
+                                    .show();
 
-                    }
-                });
+                        }
+                    });
 
-                dialog.show();
+                    dialog.show();
+                }else{
+                    //Fai qualcosa quando prendi addfilm
+                }
             }
         };
     }

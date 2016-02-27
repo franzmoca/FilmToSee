@@ -7,16 +7,19 @@ package com.danandfranz.filmtosee;
 
         import android.os.Bundle;
         import android.support.v4.app.Fragment;
-        import android.util.Log;
         import android.view.LayoutInflater;
         import android.view.View;
         import android.view.ViewGroup;
         import android.widget.Button;
+        import android.widget.RelativeLayout;
+        import android.widget.ScrollView;
         import android.widget.TextView;
 
 
 public class OneFragment extends Fragment{
     private View InputFragmentView;
+    private RelativeLayout relativeDetails;
+    private RelativeLayout relativeFilmAdd;
 
     //Attributi Film Details
     private TextView textViewLike;
@@ -45,7 +48,8 @@ public class OneFragment extends Fragment{
                 R.layout.fragment_one, container, false);
         final Button btnLike=(Button) InputFragmentView.findViewById(R.id.buttonLike);
         final Button btnUnlike=(Button) InputFragmentView.findViewById(R.id.buttonUnlike);
-
+        relativeDetails =(RelativeLayout)InputFragmentView.findViewById(R.id.RelativeFilmDetails);
+        relativeFilmAdd =(RelativeLayout)InputFragmentView.findViewById(R.id.RelativeAddFilm);
         textViewLike = (TextView) InputFragmentView.findViewById(R.id.textLikes);
         textViewUnlike = (TextView) InputFragmentView.findViewById(R.id.textUnlikes);
         title = (TextView) InputFragmentView.findViewById(R.id.title);
@@ -92,23 +96,36 @@ public class OneFragment extends Fragment{
         return InputFragmentView;
     }
 
-    public void setMovieDetails(Film film){
+    public void setMovieDetails(Film film) {
 
+        if (!film.isAdd()) {
+            relativeFilmAdd.setVisibility(View.GONE);
 
-        title.setText(film.getTitle());
-        director.setText(film.getDirector());
-        writer.setText(film.getWriter());
-        year.setText(film.getYear());
-        genre.setText(film.getGenre());
-        runtime.setText(film.getRuntime());
-        actors.setText(film.getActors());
-        plot.setText(film.getPlot());
-        imdbVote.setText(film.getImdbScore());
+            relativeDetails.setVisibility(View.VISIBLE);
+            title.setText(film.getTitle());
+            director.setText(film.getDirector());
+            writer.setText(film.getWriter());
+            year.setText(film.getYear());
+            genre.setText(film.getGenre());
+            runtime.setText(film.getRuntime());
+            actors.setText(film.getActors());
+            plot.setText(film.getPlot());
+            imdbVote.setText(film.getImdbScore());
+        }else {
+
+            relativeDetails.setVisibility(View.GONE);
+            relativeFilmAdd.setVisibility(View.VISIBLE);
+
+            //Sostituisci con qualcosa!
+        }
     }
     @Override
     public void onResume() {
         super.onResume();
         //Fix Crash
+        relativeDetails =(RelativeLayout)InputFragmentView.findViewById(R.id.RelativeFilmDetails);
+        relativeFilmAdd =(RelativeLayout)InputFragmentView.findViewById(R.id.RelativeAddFilm);
+
         textViewLike = (TextView) InputFragmentView.findViewById(R.id.textLikes);
         textViewUnlike = (TextView) InputFragmentView.findViewById(R.id.textUnlikes);
         title = (TextView) InputFragmentView.findViewById(R.id.title);
