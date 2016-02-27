@@ -3,6 +3,6 @@
     <item android:state_pressed="true"
         android:drawable="@drawable/thumbs_down_selected" /> <!-- pressed -->
     <item android:state_focused="true"
-        android:drawable="@drawable/thumbs_down_unselected" /> <!-- focused -->
+        android:drawable="@drawable/thumbs_down_selected" /> <!-- focused -->
     <item android:drawable="@drawable/thumbs_down_unselected" /> <!-- default -->
 </selector>

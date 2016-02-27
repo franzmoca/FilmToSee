@@ -112,22 +112,31 @@ public class OneFragment extends Fragment{
             imdbVote.setText(film.getImdbScore());
             textViewLike = (TextView) InputFragmentView.findViewById(R.id.textLikes);
             textViewUnlike = (TextView) InputFragmentView.findViewById(R.id.textUnlikes);
+            Log.d(TAG,""+film.isMyLike());
 
-            if(film.isLiked()){
-                btnLike.setEnabled(false);
-                btnUnlike.setEnabled(false);
+            btnUnlike.setBackgroundResource(R.drawable.thumbs_down_unselected);
+            btnLike.setBackgroundResource(R.drawable.thumbs_up_unselected);
+
+           if(film.isLiked()){
+               // btnLike.setEnabled(false);
+               // btnUnlike.setEnabled(false);
                 if(!film.isMyLike()){
                     btnUnlike.setBackgroundResource(R.drawable.thumbs_down_selected);
+                    setLike();
                 }else{
                     btnLike.setBackgroundResource(R.drawable.thumbs_up_selected);
+                    setUnlike();
+
                 }
 
             }else{
+                btnLike.setEnabled(true);
+                btnUnlike.setEnabled(true);
 
                 btnLike.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if(film.isLiked()){
+                        if(!film.isLiked()){
                             btnLike.setBackgroundResource(R.drawable.thumbs_up_selected);
                             int textLike = Integer.parseInt(textViewLike.getText().toString());
                             textLike = textLike + 1;
@@ -143,7 +152,7 @@ public class OneFragment extends Fragment{
                 btnUnlike.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if(film.isLiked()){
+                        if(!film.isLiked()){
                             btnUnlike.setBackgroundResource(R.drawable.thumbs_down_selected);
                             int textUnlike = Integer.parseInt(textViewUnlike.getText().toString());
                             textUnlike = textUnlike + 1;
@@ -185,6 +194,7 @@ public class OneFragment extends Fragment{
         plot = (TextView) InputFragmentView.findViewById(R.id.plot);
         imdbVote = (TextView) InputFragmentView.findViewById(R.id.imdbVote);
     }
+
 
 
 

@@ -50,8 +50,8 @@ public class Film {
 
             like= filmJson.getInt("likes");
             dislike= filmJson.getInt("unlikes");
-            myLike= filmJson.getBoolean("myLike");
-            liked= filmJson.getBoolean("liked");
+            myLike= Boolean.parseBoolean(filmJson.getString("myLike"));
+            liked= Boolean.parseBoolean(filmJson.getString("liked"));
            //comm
 
             this.add = false;
