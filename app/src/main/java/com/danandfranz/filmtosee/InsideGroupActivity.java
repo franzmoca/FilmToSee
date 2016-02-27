@@ -30,6 +30,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -53,10 +54,13 @@ public class InsideGroupActivity  extends AppCompatActivity {
     private CoverFlowAdapter coverFlowAdapter;
     private ArrayList<Film> films;
     public JSONObject groupData;
-    private String rid;
+    private String ridFilm;
+    private String ridUser;
+
     OkHttpClient client;
     ProgressDialog progressDialog;
     private ViewPagerAdapter fragmentAdapter;
+    SessionManager session;
 
 
 
@@ -75,6 +79,11 @@ public class InsideGroupActivity  extends AppCompatActivity {
         progressDialog = new ProgressDialog(InsideGroupActivity.this);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Loading...");
+
+        session = new SessionManager(getApplicationContext());
+        HashMap<String, String> user = session.getUserDetails();
+        ridUser = user.get(SessionManager.KEY_RID);
+
 
 
         client = new OkHttpClient();
@@ -149,9 +158,9 @@ public class InsideGroupActivity  extends AppCompatActivity {
         //end swipe
 
         try {
-            rid = groupData.getString("rid");
+            ridFilm = groupData.getString("rid");
             progressDialog.show();
-            getFilmJsonByGroup(rid);
+            getFilmJsonByGroup(ridFilm,ridUser);
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -339,10 +348,11 @@ public class InsideGroupActivity  extends AppCompatActivity {
 
     }
 
-    private void getFilmJsonByGroup(String rid) throws IOException {
+    private void getFilmJsonByGroup(String rid, String ridUser) throws IOException {
         RequestBody body = new FormBody.Builder()
                 .add("get", "filmOfGroup")
                 .add("groupRid", rid)
+                .add("userrid", ridUser)
                 .build();
 
         Util.post(body,client, new Callback() {

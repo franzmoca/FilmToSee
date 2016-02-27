@@ -7,6 +7,8 @@ package com.danandfranz.filmtosee;
 
         import android.os.Bundle;
         import android.support.v4.app.Fragment;
+        import android.support.v7.widget.LinearLayoutManager;
+        import android.util.Log;
         import android.view.LayoutInflater;
         import android.view.View;
         import android.view.ViewGroup;
@@ -15,11 +17,33 @@ package com.danandfranz.filmtosee;
         import android.widget.ScrollView;
         import android.widget.TextView;
 
+        import org.json.JSONArray;
+        import org.json.JSONException;
+        import org.json.JSONObject;
+
+        import java.io.IOException;
+        import java.util.ArrayList;
+
+        import it.gmariotti.cardslib.library.internal.Card;
+        import it.gmariotti.cardslib.library.recyclerview.internal.CardArrayRecyclerViewAdapter;
+        import it.gmariotti.cardslib.library.recyclerview.view.CardRecyclerView;
+        import okhttp3.Call;
+        import okhttp3.Callback;
+        import okhttp3.FormBody;
+        import okhttp3.OkHttpClient;
+        import okhttp3.RequestBody;
+        import okhttp3.Response;
+
 
 public class OneFragment extends Fragment{
+    OkHttpClient client;
+
     private View InputFragmentView;
     private RelativeLayout relativeDetails;
     private RelativeLayout relativeFilmAdd;
+    private Button btnLike;
+    private Button btnUnlike;
+    boolean bool;
 
     //Attributi Film Details
     private TextView textViewLike;
@@ -46,8 +70,8 @@ public class OneFragment extends Fragment{
         super.onCreateView(inflater, container, savedInstanceState);
         InputFragmentView = inflater.inflate(
                 R.layout.fragment_one, container, false);
-        final Button btnLike=(Button) InputFragmentView.findViewById(R.id.buttonLike);
-        final Button btnUnlike=(Button) InputFragmentView.findViewById(R.id.buttonUnlike);
+        btnLike = (Button) InputFragmentView.findViewById(R.id.buttonLike);
+        btnUnlike = (Button) InputFragmentView.findViewById(R.id.buttonUnlike);
         relativeDetails =(RelativeLayout)InputFragmentView.findViewById(R.id.RelativeFilmDetails);
         relativeFilmAdd =(RelativeLayout)InputFragmentView.findViewById(R.id.RelativeAddFilm);
         textViewLike = (TextView) InputFragmentView.findViewById(R.id.textLikes);
@@ -62,41 +86,16 @@ public class OneFragment extends Fragment{
         plot = (TextView) InputFragmentView.findViewById(R.id.plot);
         imdbVote = (TextView) InputFragmentView.findViewById(R.id.imdbVote);
 
+        //// TODO
+        //prendere numero like e unlike e settarli
+        //quando faccio like o unlike chiamata post
+        //aggiorno
 
-        final boolean[] bool = {true};
-        btnLike.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(bool[0] ==true){
-                    btnLike.setBackgroundResource(R.drawable.thumbs_up_selected);
-                    int textLike = Integer.parseInt(textViewLike.getText().toString());
-                    textLike = textLike + 1;
-                    textViewLike.setText("" + textLike);
-                    btnLike.setEnabled(false);
-                    bool[0] =false;
-                }
 
-            }
-        });
-
-        btnUnlike.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(bool[0] ==true) {
-
-                    btnUnlike.setBackgroundResource(R.drawable.thumbs_down_selected);
-                    int textUnlike = Integer.parseInt(textViewUnlike.getText().toString());
-                    textUnlike = textUnlike + 1;
-                    textViewUnlike.setText("" + textUnlike);
-                    btnLike.setEnabled(false);
-                    bool[0] =false;
-                }
-            }
-        });
         return InputFragmentView;
     }
 
-    public void setMovieDetails(Film film) {
+    public void setMovieDetails(final Film film) {
 
         if (!film.isAdd()) {
             relativeFilmAdd.setVisibility(View.GONE);
@@ -111,6 +110,54 @@ public class OneFragment extends Fragment{
             actors.setText(film.getActors());
             plot.setText(film.getPlot());
             imdbVote.setText(film.getImdbScore());
+            textViewLike = (TextView) InputFragmentView.findViewById(R.id.textLikes);
+            textViewUnlike = (TextView) InputFragmentView.findViewById(R.id.textUnlikes);
+
+            if(film.isLiked()){
+                btnLike.setEnabled(false);
+                btnUnlike.setEnabled(false);
+                if(!film.isMyLike()){
+                    btnUnlike.setBackgroundResource(R.drawable.thumbs_down_selected);
+                }else{
+                    btnLike.setBackgroundResource(R.drawable.thumbs_up_selected);
+                }
+
+            }else{
+
+                btnLike.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(film.isLiked()){
+                            btnLike.setBackgroundResource(R.drawable.thumbs_up_selected);
+                            int textLike = Integer.parseInt(textViewLike.getText().toString());
+                            textLike = textLike + 1;
+                            textViewLike.setText("" + textLike);
+                            btnLike.setEnabled(false);
+                            btnUnlike.setEnabled(false);
+                            film.setIsLiked(false);
+                        }
+
+                    }
+                });
+
+                btnUnlike.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(film.isLiked()){
+                            btnUnlike.setBackgroundResource(R.drawable.thumbs_down_selected);
+                            int textUnlike = Integer.parseInt(textViewUnlike.getText().toString());
+                            textUnlike = textUnlike + 1;
+                            textViewUnlike.setText("" + textUnlike);
+                            btnLike.setEnabled(false);
+                            btnUnlike.setEnabled(false);
+                            film.setIsLiked(false);
+                        }
+                    }
+                });
+            }
+            textViewLike.setText("" + film.getLike());
+            textViewUnlike.setText("" + film.getDislike());
+
         }else {
 
             relativeDetails.setVisibility(View.GONE);

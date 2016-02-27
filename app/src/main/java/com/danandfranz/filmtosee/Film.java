@@ -19,7 +19,10 @@ public class Film {
     private String imdbID;
     private int like;
     private int dislike;
+    private boolean myLike;
+    private boolean liked;
     private boolean add;
+
 
 
 
@@ -44,6 +47,13 @@ public class Film {
             imdbScore  =filmJson.getString("imdbRating");
             imdbID=filmJson.getString("imdbID");
             imageLink = filmJson.getString("Poster");
+
+            like= filmJson.getInt("likes");
+            dislike= filmJson.getInt("unlikes");
+            myLike= filmJson.getBoolean("myLike");
+            liked= filmJson.getBoolean("liked");
+           //comm
+
             this.add = false;
         }catch (Exception e) {
             e.printStackTrace();
@@ -153,5 +163,16 @@ public class Film {
 
     public boolean isAdd() {
         return add;
+    }
+
+    public boolean isMyLike() {
+        return myLike;
+    }
+
+    public boolean isLiked() {
+        return liked;
+    }
+    public void setIsLiked(boolean liked) {
+        this.liked = liked;
     }
 }
