@@ -1,13 +1,7 @@
 package com.danandfranz.filmtosee;
 
 
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.ClipData;
-import android.content.Intent;
-import android.net.Uri;
-import android.support.v4.app.DialogFragment;
-import android.content.DialogInterface;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -21,45 +15,34 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.PopupWindow;
-import android.widget.TextView;
-import android.view.ViewTreeObserver;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.google.android.gms.appindexing.Action;
-import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.common.api.GoogleApiClient;
-
+import java.io.IOException;
 import java.lang.reflect.Field;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
-import com.rockerhieu.emojicon.*;
-import com.rockerhieu.emojicon.EmojiconsFragment;
-import com.rockerhieu.emojicon.emoji.Emojicon;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.danandfranz.filmtosee.R;
-import com.danandfranz.filmtosee.OneFragment;
-import com.danandfranz.filmtosee.TwoFragment;
-
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import it.moondroid.coverflow.components.ui.containers.FeatureCoverFlow;
-
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 
 public class InsideGroupActivity  extends AppCompatActivity {
@@ -67,9 +50,14 @@ public class InsideGroupActivity  extends AppCompatActivity {
     private static final String TAG = "InsideGroupActivity" ;
 
     private FeatureCoverFlow coverFlow;
-    private CoverFlowAdapter adapter;
+    private CoverFlowAdapter coverFlowAdapter;
     private ArrayList<Film> films;
     public JSONObject groupData;
+    private String rid;
+    OkHttpClient client;
+    ProgressDialog progressDialog;
+    private ViewPagerAdapter fragmentAdapter;
+
 
 
     //SWIPE
@@ -83,6 +71,14 @@ public class InsideGroupActivity  extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inside_group);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        progressDialog = new ProgressDialog(InsideGroupActivity.this);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("Loading...");
+
+
+        client = new OkHttpClient();
+
         try {
             groupData = new JSONObject(getIntent().getStringExtra("json"));
                   //setSubtitle(groupData.getJSONArray("members").length() + " members.");
@@ -122,25 +118,9 @@ public class InsideGroupActivity  extends AppCompatActivity {
         }
 
 
+
         //END OF TOOLBAR SETTINGS
-
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-
-                //COVER FLOW
-                coverFlow = (FeatureCoverFlow) findViewById(R.id.coverflow);
-
-                settingDummyData();
-                adapter = new CoverFlowAdapter(InsideGroupActivity.this, films);
-                coverFlow.setAdapter(adapter);
-                coverFlow.setOnScrollPositionListener(onScrollListener());
-                //END OF COVER FLOW
-
-
-            }
-        });
-
+        //Scarico i dati json dei film e li aggiungo alla coverflow
 
         //swipe
 
@@ -155,6 +135,15 @@ public class InsideGroupActivity  extends AppCompatActivity {
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
         //end swipe
+
+        try {
+            rid = groupData.getString("rid");
+            //progressDialog.show();
+            getFilmJsonByGroup(rid);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 
 
@@ -162,31 +151,51 @@ public class InsideGroupActivity  extends AppCompatActivity {
     private FeatureCoverFlow.OnScrollPositionListener onScrollListener() {
         return new FeatureCoverFlow.OnScrollPositionListener() {
             @Override
-            public void onScrolledToPosition(int position) {
-                Log.v("MainActiivty", "position: " + position);
+            public void onScrolledToPosition(int position)
+            {
+                Log.v(TAG, "position: " + position);
+                Film film = coverFlowAdapter.getItem(position);
+                OneFragment one = (OneFragment) fragmentAdapter.getItem(0);
+                one.setMovieDetails(film);
             }
-
             @Override
             public void onScrolling() {
-                Log.i("MainActivity", "scrolling");
+                Log.i(TAG, "scrolling");
             }
         };
     }
 
-    private void settingDummyData() {
+    private void settingFilmData(JSONArray jsonObj) throws JSONException {
         films = new ArrayList<>();
-        films.add(new Film(R.mipmap.assassins_creed, "Assassin Creed 3"));
-        films.add(new Film(R.mipmap.avatar_3d, "Avatar 3D"));
-        films.add(new Film(R.mipmap.call_of_duty_black_ops_3, "Call Of Duty Black Ops 3"));
-        films.add(new Film(R.mipmap.dota_2, "DotA 2"));
-        films.add(new Film(R.mipmap.halo_5, "Halo 5"));
-        films.add(new Film(R.mipmap.left_4_dead_2, "Left 4 Dead 2"));
-        films.add(new Film(R.mipmap.starcraft, "StarCraft"));
-        films.add(new Film(R.mipmap.the_witcher_3, "The Witcher 3"));
-        films.add(new Film(R.mipmap.tomb_raider, "Tom raider 3"));
-        films.add(new Film(R.mipmap.need_for_speed_most_wanted, "Need for Speed Most Wanted"));
-        films.add(new Film(R.mipmap.addfilmcover, "Add Movie"));
+        for(int i = 0;i<jsonObj.length();i++){
+            films.add(new Film(jsonObj.getJSONObject(i)));
+        }
 
+        //Faccio partire la coverflow
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+
+                //Creo la coverflow
+                RelativeLayout parent = (RelativeLayout) findViewById(R.id.relativeLayout);
+
+
+                LayoutInflater inflater = (LayoutInflater)   InsideGroupActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                View v = inflater.inflate(R.layout.coverflow, parent);
+                coverFlow = (FeatureCoverFlow) v.findViewById(R.id.coverflow);
+                //COVER FLOW
+                //coverFlow = (FeatureCoverFlow) findViewById(R.id.coverflow);
+                Log.d(TAG, "CIAO" + films.size());
+
+                coverFlowAdapter = new CoverFlowAdapter(InsideGroupActivity.this, films);
+                coverFlow.setAdapter(coverFlowAdapter);
+                coverFlow.setOnScrollPositionListener(onScrollListener());
+                //END OF COVER FLOW
+
+
+            }
+        });
     }
 
 
@@ -225,18 +234,20 @@ public class InsideGroupActivity  extends AppCompatActivity {
 
     //SWIPE
     private void setupViewPager(ViewPager viewPager) {
-        ViewPagerAdapter adapter1 = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter1.addFragment(new OneFragment(), "MOVIE DETAILES");
-        adapter1.addFragment(new TwoFragment(), "COMMENTS");
-        viewPager.setAdapter(adapter1);
+        fragmentAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+        fragmentAdapter.addFragment(new OneFragment(), "MOVIE DETAILES");
+        fragmentAdapter.addFragment(new TwoFragment(), "COMMENTS");
+        viewPager.setAdapter(fragmentAdapter);
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {
         private final List<Fragment> mFragmentList = new ArrayList<>();
         private final List<String> mFragmentTitleList = new ArrayList<>();
+        public final FragmentManager manager;
 
         public ViewPagerAdapter(FragmentManager manager) {
             super(manager);
+            this.manager = manager;
         }
 
         @Override
@@ -296,5 +307,39 @@ public class InsideGroupActivity  extends AppCompatActivity {
                 .icon(this.getResources().getDrawable(R.drawable.ic_delete_24dp))
                 .show();
 
+    }
+
+    private void getFilmJsonByGroup(String rid) throws IOException {
+        RequestBody body = new FormBody.Builder()
+                .add("get", "filmOfGroup")
+                .add("groupRid", rid)
+                .build();
+
+        Util.post(body,client, new Callback() {
+            @Override public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override public void onResponse(Call call , Response response) throws IOException {
+                if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+                //System.out.println(response.body().toString());
+                try {
+                    String json = response.body().string();
+                    Log.d(TAG,json);
+                    JSONArray jsonObj = new JSONArray(json);
+
+                    if (jsonObj.length()>0) {
+                        settingFilmData(jsonObj);
+                       // progressDialog.hide();
+
+                    } else {
+                        //progressDialog.hide();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        });
     }
 }

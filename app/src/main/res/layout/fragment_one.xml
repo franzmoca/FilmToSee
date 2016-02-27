@@ -89,8 +89,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="@string/imdb_rating"
-                    android:id="@+id/textView"
+                    android:text=""
+                    android:id="@+id/imdbVote"
                     android:layout_weight="1.5"
                     android:textAlignment="textEnd"
                     android:textColor="#ddab18"
@@ -124,7 +124,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Steve Jobs"
+                android:text=""
                 android:id="@+id/title"
                 android:textColor="#000000"
                 android:textSize="17dp" />
@@ -152,7 +152,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Danny Boyle"
+                android:text=""
                 android:id="@+id/director"
                 android:textColor="#000000"
                 android:textSize="17dp" />
@@ -180,7 +180,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Aaron Sorkin (screenplay), Walter Isaacson (book)"
+                android:text=""
                 android:id="@+id/writer"
                 android:textColor="#000000"
                 android:textSize="17dp" />
@@ -208,7 +208,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="2015"
+                android:text=""
                 android:id="@+id/year"
                 android:textColor="#000000"
                 android:textSize="17dp" />
@@ -218,7 +218,7 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/releasedRaw"
+            android:id="@+id/genreRaw"
             android:layout_below="@+id/yearRaw"
             android:weightSum="2"
             android:paddingTop="4dp">
@@ -227,7 +227,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="RELEASED"
+                android:text="Genre"
                 android:id="@+id/textReleased"
                 android:textColor="#2fa9e1"
                 android:textStyle="bold" />
@@ -236,8 +236,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="23 Oct 2015"
-                android:id="@+id/released"
+                android:text=""
+                android:id="@+id/genre"
                 android:textColor="#000000"
                 android:textSize="17dp" />
         </LinearLayout>
@@ -247,7 +247,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/runtimeRaw"
-            android:layout_below="@+id/releasedRaw"
+            android:layout_below="@+id/genreRaw"
             android:weightSum="2"
             android:paddingTop="4dp">
 
@@ -264,7 +264,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="122 min"
+                android:text=""
                 android:id="@+id/runtime"
                 android:textColor="#000000"
                 android:textSize="17dp" />
@@ -293,7 +293,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Michael Fassbender, Kate Winslet, Seth Rogen, Jeff Daniels"
+                android:text=""
                 android:id="@+id/actors"
                 android:textColor="#000000"
                 android:textSize="17dp" />
@@ -321,7 +321,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Steve Jobs takes us behind the scenes of the digital revolution, to paint a portrait of the man at its epicenter. The story unfolds backstage at three iconic product launches, ending in 1998 with the unveiling of the iMac."
+                android:text=""
                 android:id="@+id/plot"
                 android:textColor="#000000"
                 android:textSize="17dp" />

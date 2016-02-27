@@ -1,5 +1,6 @@
 package com.danandfranz.filmtosee;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
@@ -57,8 +58,9 @@ public class GroupsActivity extends AppCompatActivity
     SessionManager session;
     private static final String TAG = "GroupsActivity";
     LetterTileProvider tileProvider;
-
     OkHttpClient client;
+    ProgressDialog progressDialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,6 +122,10 @@ public class GroupsActivity extends AppCompatActivity
         //CARTE
         client = new OkHttpClient();
         try {
+            progressDialog = new ProgressDialog(GroupsActivity.this);
+            progressDialog.setIndeterminate(true);
+            progressDialog.setMessage("Loading...");
+            progressDialog.show();
             getCards(name); //TODO: PROGRESS BAR
         }catch (Exception e){
             e.printStackTrace();
@@ -164,6 +170,8 @@ public class GroupsActivity extends AppCompatActivity
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
+                                progressDialog.hide();
+
 
                             }
                         });

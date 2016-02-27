@@ -57,6 +57,7 @@ public class LoginActivity extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        client = new OkHttpClient();
         session = new SessionManager(getApplicationContext());
         // Set up the login form.
         mEmailView = (EditText) findViewById(R.id.input_email);
@@ -106,7 +107,6 @@ public class LoginActivity extends AppCompatActivity  {
         final String email = mEmailView.getText().toString();
         final String password = mPasswordView.getText().toString();
 
-        client = new OkHttpClient();
 
         Call newcall = getLogin(email, password);
         signInButton.setEnabled(true);

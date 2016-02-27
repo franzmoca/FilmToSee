@@ -13,10 +13,24 @@ package com.danandfranz.filmtosee;
         import android.widget.Button;
         import android.widget.TextView;
 
-        import com.danandfranz.filmtosee.R;
-
 
 public class OneFragment extends Fragment{
+    private View InputFragmentView;
+
+    //Attributi Film Details
+    private TextView textViewLike;
+    private TextView textViewUnlike;
+    private TextView title;
+    private TextView director;
+    private TextView writer;
+    private TextView year;
+    private TextView genre;
+    private TextView runtime;
+    private TextView actors;
+    private TextView plot;
+    private TextView imdbVote;
+
+
 
     public OneFragment() {
         // Required empty public constructor
@@ -26,14 +40,24 @@ public class OneFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
 
         super.onCreateView(inflater, container, savedInstanceState);
-        View InputFragmentView = inflater.inflate(
+        InputFragmentView = inflater.inflate(
                 R.layout.fragment_one, container, false);
         final Button btnLike=(Button) InputFragmentView.findViewById(R.id.buttonLike);
         final Button btnUnlike=(Button) InputFragmentView.findViewById(R.id.buttonUnlike);
 
-        final TextView textViewLike=(TextView) InputFragmentView.findViewById(R.id.textLikes);
+        textViewLike = (TextView) InputFragmentView.findViewById(R.id.textLikes);
+        textViewUnlike = (TextView) InputFragmentView.findViewById(R.id.textUnlikes);
+        title = (TextView) InputFragmentView.findViewById(R.id.title);
+        director = (TextView) InputFragmentView.findViewById(R.id.director);
+        writer = (TextView) InputFragmentView.findViewById(R.id.writer);
+        year = (TextView) InputFragmentView.findViewById(R.id.year);
+        genre = (TextView) InputFragmentView.findViewById(R.id.genre);
+        runtime = (TextView) InputFragmentView.findViewById(R.id.runtime);
+        actors = (TextView) InputFragmentView.findViewById(R.id.actors);
+        plot = (TextView) InputFragmentView.findViewById(R.id.plot);
+        imdbVote = (TextView) InputFragmentView.findViewById(R.id.imdbVote);
 
-        final TextView textViewUnlike=(TextView) InputFragmentView.findViewById(R.id.textUnlikes);
+
         final boolean[] bool = {true};
         btnLike.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,6 +91,18 @@ public class OneFragment extends Fragment{
         return InputFragmentView;
     }
 
+    public void setMovieDetails(Film film){
+
+        title.setText(film.getTitle());
+        director.setText(film.getDirector());
+        writer.setText(film.getWriter());
+        year.setText(film.getYear());
+        genre.setText(film.getGenre());
+        runtime.setText(film.getRuntime());
+        actors.setText(film.getActors());
+        plot.setText(film.getPlot());
+        imdbVote.setText(film.getImdbScore());
+    }
 
 
 
