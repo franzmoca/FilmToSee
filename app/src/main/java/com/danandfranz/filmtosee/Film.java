@@ -10,6 +10,23 @@ public class Film {
     private String imageLink;
     private String year;
     private String runtime;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Film film = (Film) o;
+
+        return imdbID.equals(film.imdbID);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return imdbID.hashCode();
+    }
+
     private String genre;
     private String director;
     private String writer;
@@ -33,7 +50,27 @@ public class Film {
         this.imageLink = "assets://addfilmcover.png";
         this.add = true;
     }
+    public Film(String title,String year) {
+        this.title = title;
+        this.year = year;
+        this.add = false;
+    }
 
+    public Film(JSONObject filmJson,boolean autocomplete){
+        if(autocomplete){
+            try {
+                title = filmJson.getString("Title");
+                year = filmJson.getString("Year");
+                imdbID=filmJson.getString("imdbID");
+                imageLink = filmJson.getString("Poster");
+                this.add = false;
+            }catch (Exception e) {
+                e.printStackTrace();
+            }
+        }else {
+            new Film(filmJson);
+        }
+    }
     public Film(JSONObject filmJson){
         try {
             title = filmJson.getString("Title");
@@ -70,7 +107,12 @@ public class Film {
     }
 
     public String getImageLink() {
-        return imageLink;
+        String link = imageLink;
+        if(link.equalsIgnoreCase("N/A")){
+            link = "assets://noposter.png";
+        }
+
+        return link;
     }
 
     public String getYear() {

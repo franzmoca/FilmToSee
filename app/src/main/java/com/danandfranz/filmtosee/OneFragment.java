@@ -5,6 +5,7 @@ package com.danandfranz.filmtosee;
  */
 
 
+        import android.content.Intent;
         import android.os.Bundle;
         import android.support.design.widget.Snackbar;
         import android.support.v4.app.Fragment;
@@ -14,9 +15,16 @@ package com.danandfranz.filmtosee;
         import android.view.View;
         import android.view.ViewGroup;
         import android.widget.Button;
+        import android.widget.ImageView;
+        import android.widget.LinearLayout;
         import android.widget.RelativeLayout;
         import android.widget.ScrollView;
         import android.widget.TextView;
+
+        import com.nostra13.universalimageloader.cache.disc.naming.HashCodeFileNameGenerator;
+        import com.nostra13.universalimageloader.core.DisplayImageOptions;
+        import com.nostra13.universalimageloader.core.ImageLoader;
+        import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
         import org.json.JSONArray;
         import org.json.JSONException;
@@ -44,6 +52,8 @@ public class OneFragment extends Fragment{
     private RelativeLayout relativeFilmAdd;
     private Button btnLike;
     private Button btnUnlike;
+    private Button btnAddFilm;
+
     boolean bool;
 
     //Attributi Film Details
@@ -59,6 +69,12 @@ public class OneFragment extends Fragment{
     private TextView plot;
     private TextView imdbVote;
     private String TAG = "OneFragment";
+    private LinearLayout addMoveDetails;
+    private ImageLoader imageLoader;
+    private TextView addTitle;
+    private TextView addYear;
+    private DisplayImageOptions options;
+    private ImageView poster;
 
 
     public OneFragment() {
@@ -70,12 +86,29 @@ public class OneFragment extends Fragment{
 
         super.onCreateView(inflater, container, savedInstanceState);
         client = new OkHttpClient();
+        imageLoader = ImageLoader.getInstance();
+        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this.getContext())
+                // You can pass your own memory cache implementation
+                //.diskCacheExtraOptions(1024, 1024, null)
+                .diskCacheFileNameGenerator(new HashCodeFileNameGenerator())
+                .build();
+        if (!imageLoader.isInited()) {
+            imageLoader.init(config);
+        }
+        options = new DisplayImageOptions.Builder()
+                .showImageOnLoading(R.drawable.ic_launcher)
+                .cacheInMemory(true)
+                .cacheOnDisk(true)
+                .build();
+
         InputFragmentView = inflater.inflate(
                 R.layout.fragment_one, container, false);
         btnLike = (Button) InputFragmentView.findViewById(R.id.buttonLike);
         btnUnlike = (Button) InputFragmentView.findViewById(R.id.buttonUnlike);
-        relativeDetails =(RelativeLayout)InputFragmentView.findViewById(R.id.RelativeFilmDetails);
-        relativeFilmAdd =(RelativeLayout)InputFragmentView.findViewById(R.id.RelativeAddFilm);
+        relativeDetails = (RelativeLayout) InputFragmentView.findViewById(R.id.RelativeFilmDetails);
+        relativeFilmAdd = (RelativeLayout) InputFragmentView.findViewById(R.id.RelativeAddFilm);
+
+        addMoveDetails = (LinearLayout) InputFragmentView.findViewById(R.id.add_movieDetails);
         textViewLike = (TextView) InputFragmentView.findViewById(R.id.textLikes);
         textViewUnlike = (TextView) InputFragmentView.findViewById(R.id.textUnlikes);
         title = (TextView) InputFragmentView.findViewById(R.id.title);
@@ -88,6 +121,11 @@ public class OneFragment extends Fragment{
         plot = (TextView) InputFragmentView.findViewById(R.id.plot);
         imdbVote = (TextView) InputFragmentView.findViewById(R.id.imdbVote);
 
+        btnAddFilm = (Button) InputFragmentView.findViewById(R.id.button_addMovie);
+
+        addTitle = (TextView) InputFragmentView.findViewById(R.id.add_title);
+        addYear = (TextView) InputFragmentView.findViewById(R.id.add_year);
+        poster = (ImageView) InputFragmentView.findViewById(R.id.poster);
 
 
         //// TODO
@@ -125,7 +163,7 @@ public class OneFragment extends Fragment{
 
             textViewLike.setText("" + likes);
             textViewUnlike.setText("" + unlikes);
-
+/*
            if(film.isLiked()){
                // btnLike.setEnabled(false);
                // btnUnlike.setEnabled(false);
@@ -293,21 +331,28 @@ public class OneFragment extends Fragment{
                });
 
 
-           }
+           }*/
         }else {
 
             relativeDetails.setVisibility(View.GONE);
             relativeFilmAdd.setVisibility(View.VISIBLE);
+            btnAddFilm.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ((InsideGroupActivity) getActivity()).addFilm();
+                }
+            });
 
             //Sostituisci con qualcosa!
         }
     }
+
     @Override
     public void onResume() {
         super.onResume();
         //Fix Crash
-        relativeDetails =(RelativeLayout)InputFragmentView.findViewById(R.id.RelativeFilmDetails);
-        relativeFilmAdd =(RelativeLayout)InputFragmentView.findViewById(R.id.RelativeAddFilm);
+        relativeDetails = (RelativeLayout) InputFragmentView.findViewById(R.id.RelativeFilmDetails);
+        relativeFilmAdd = (RelativeLayout) InputFragmentView.findViewById(R.id.RelativeAddFilm);
 
         textViewLike = (TextView) InputFragmentView.findViewById(R.id.textLikes);
         textViewUnlike = (TextView) InputFragmentView.findViewById(R.id.textUnlikes);
@@ -324,11 +369,13 @@ public class OneFragment extends Fragment{
 
 
 
+
+
     public void setLike(String userRid,String groupRid,String id_film,boolean thumbs)throws IOException {
         Log.d("user",userRid);
         Log.d("groupRid",groupRid);
         Log.d("id_film",id_film);
-        Log.d("bool_like",String.valueOf(thumbs));
+        Log.d("bool_like", String.valueOf(thumbs));
 
         RequestBody body = new FormBody.Builder()
                 .add("get", "likes")
@@ -422,4 +469,68 @@ public class OneFragment extends Fragment{
         });
 
     }
+
+
+
+    public void setAddMovieDetails(final Film film) {
+        ArrayList<Film> films = ((InsideGroupActivity) getActivity()).getFilms();
+        if (!films.contains(film)) {
+
+            addMoveDetails.setVisibility(View.VISIBLE);
+            addTitle.setText(film.getTitle());
+            addYear.setText(film.getYear());
+            imageLoader.displayImage(film.getImageLink(), poster);
+            Log.d(TAG, film.getImdbID());
+
+            btnAddFilm.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    RequestBody body = new FormBody.Builder()
+                            .add("get", "addFilm")
+                            .add("id_film", film.getImdbID())
+                            .add("groupRid", ((InsideGroupActivity) getActivity()).getGroupRid())
+                            .build();
+
+                    try {
+                        Util.post(body, client, new Callback() {
+                            @Override
+                            public void onFailure(Call call, IOException e) {
+                                e.printStackTrace();
+                            }
+
+                            @Override
+                            public void onResponse(Call call, Response response) throws IOException {
+                                if (!response.isSuccessful())
+                                    throw new IOException("Unexpected code " + response);
+                                String json = response.body().string();
+                                //RIAVVIO l'activity
+                                ((InsideGroupActivity) getActivity()).restartActivity();
+
+                            }
+
+                        });
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+
+                }
+
+
+            });
+        }else{
+
+            Snackbar.make(relativeFilmAdd, "Film already in group!", Snackbar.LENGTH_LONG)
+                    .setAction("Close", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            // Perform anything for the action selected
+                        }
+                    }).setDuration(Snackbar.LENGTH_LONG).show();
+
+
+
+        }
+    }
+
 }

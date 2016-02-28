@@ -87,6 +87,7 @@ public class CoverFlowAdapter extends BaseAdapter {
         sp = new ProgressDialog(context);
         sp.setIndeterminate(true);
         sp.setMessage("Loading...");
+        sp.setCancelable(false);
 
 
 
@@ -169,6 +170,7 @@ public class CoverFlowAdapter extends BaseAdapter {
                                         }
                                     })
                                     .show();
+
 
                         }
                     });

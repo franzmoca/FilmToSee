@@ -125,6 +125,7 @@ public class GroupsActivity extends AppCompatActivity
             progressDialog = new ProgressDialog(GroupsActivity.this);
             progressDialog.setIndeterminate(true);
             progressDialog.setMessage("Loading...");
+            progressDialog.setCancelable(false);
             progressDialog.show();
             getCards(name); //TODO: PROGRESS BAR
         }catch (Exception e){
