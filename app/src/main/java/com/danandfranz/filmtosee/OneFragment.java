@@ -6,6 +6,7 @@ package com.danandfranz.filmtosee;
 
 
         import android.os.Bundle;
+        import android.support.design.widget.Snackbar;
         import android.support.v4.app.Fragment;
         import android.support.v7.widget.LinearLayoutManager;
         import android.util.Log;
@@ -68,6 +69,7 @@ public class OneFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
 
         super.onCreateView(inflater, container, savedInstanceState);
+        client = new OkHttpClient();
         InputFragmentView = inflater.inflate(
                 R.layout.fragment_one, container, false);
         btnLike = (Button) InputFragmentView.findViewById(R.id.buttonLike);
@@ -112,7 +114,7 @@ public class OneFragment extends Fragment{
             imdbVote.setText(film.getImdbScore());
             textViewLike = (TextView) InputFragmentView.findViewById(R.id.textLikes);
             textViewUnlike = (TextView) InputFragmentView.findViewById(R.id.textUnlikes);
-            Log.d(TAG,""+film.isMyLike());
+
 
             btnUnlike.setBackgroundResource(R.drawable.thumbs_down_unselected);
             btnLike.setBackgroundResource(R.drawable.thumbs_up_unselected);
@@ -122,10 +124,9 @@ public class OneFragment extends Fragment{
                // btnUnlike.setEnabled(false);
                 if(!film.isMyLike()){
                     btnUnlike.setBackgroundResource(R.drawable.thumbs_down_selected);
-                    setLike();
                 }else{
                     btnLike.setBackgroundResource(R.drawable.thumbs_up_selected);
-                    setUnlike();
+
 
                 }
 
@@ -137,13 +138,34 @@ public class OneFragment extends Fragment{
                     @Override
                     public void onClick(View v) {
                         if(!film.isLiked()){
-                            btnLike.setBackgroundResource(R.drawable.thumbs_up_selected);
-                            int textLike = Integer.parseInt(textViewLike.getText().toString());
-                            textLike = textLike + 1;
-                            textViewLike.setText("" + textLike);
-                            btnLike.setEnabled(false);
-                            btnUnlike.setEnabled(false);
-                            film.setIsLiked(false);
+                            String groupId=((InsideGroupActivity)getActivity()).getGroupRid();
+                            String userId=((InsideGroupActivity)getActivity()).getUserRid();
+                            try {
+
+                                setLike(groupId,userId,film.getImdbID(),true);
+
+
+
+                                btnLike.setBackgroundResource(R.drawable.thumbs_up_selected);
+                                int textLike = Integer.parseInt(textViewLike.getText().toString());
+                                textLike = textLike + 1;
+                                textViewLike.setText("" + textLike);
+                                btnLike.setEnabled(false);
+                                btnUnlike.setEnabled(false);
+                                film.setIsLiked(false);
+
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Snackbar.make(relativeFilmAdd, "Error occured", Snackbar.LENGTH_LONG)
+                                                .setDuration(Snackbar.LENGTH_LONG).show();
+                                    }
+                                });
+                            }
+
+
                         }
 
                     }
@@ -153,13 +175,37 @@ public class OneFragment extends Fragment{
                     @Override
                     public void onClick(View v) {
                         if(!film.isLiked()){
-                            btnUnlike.setBackgroundResource(R.drawable.thumbs_down_selected);
-                            int textUnlike = Integer.parseInt(textViewUnlike.getText().toString());
-                            textUnlike = textUnlike + 1;
-                            textViewUnlike.setText("" + textUnlike);
-                            btnLike.setEnabled(false);
-                            btnUnlike.setEnabled(false);
-                            film.setIsLiked(false);
+                            String groupId=((InsideGroupActivity)getActivity()).getGroupRid();
+                            String userId=((InsideGroupActivity)getActivity()).getUserRid();
+                            try {
+                                setLike(groupId,userId,film.getImdbID(),false);
+
+
+                                btnUnlike.setBackgroundResource(R.drawable.thumbs_down_selected);
+                                int textUnlike = Integer.parseInt(textViewUnlike.getText().toString());
+                                textUnlike = textUnlike + 1;
+                                textViewUnlike.setText("" + textUnlike);
+                                btnLike.setEnabled(false);
+                                btnUnlike.setEnabled(false);
+                                film.setIsLiked(false);
+
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Snackbar.make(relativeFilmAdd, "Error occured", Snackbar.LENGTH_LONG)
+                                                .setDuration(Snackbar.LENGTH_LONG).show();
+                                    }
+                                });
+                            }
+
+
+
+
+
+
+
                         }
                     }
                 });
@@ -197,6 +243,47 @@ public class OneFragment extends Fragment{
 
 
 
+    public void setLike(String userRid,String groupRid,String id_film,boolean thumbs)throws IOException {
+        RequestBody body = new FormBody.Builder()
+                .add("get", "likes")
+                .add("userRid", userRid)
+                .add("groupRid", groupRid)
+                .add("id_film", id_film)
+                .add("bool_like", String.valueOf(thumbs))
+                .build();
 
+        Util.post(body, client, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
 
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+                //System.out.println(response.body().toString());
+                try {
+
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Snackbar.make(relativeFilmAdd, "Like!", Snackbar.LENGTH_LONG)
+                                    .setAction("Close", new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            // Perform anything for the action selected
+                                        }
+                                    }).setDuration(Snackbar.LENGTH_LONG).show();
+                        }
+                    });
+
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
+
+            }
+
+        });
+
+    }
 }

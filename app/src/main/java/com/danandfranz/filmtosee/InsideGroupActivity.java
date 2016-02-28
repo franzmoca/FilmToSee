@@ -167,6 +167,21 @@ public class InsideGroupActivity  extends AppCompatActivity {
 
     }
 
+    public String getGroupRid(){
+        try {
+            return groupData.getString("rid");
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+
+    public String getUserRid(){
+        return ridUser;
+
+    }
+
 
 
     private FeatureCoverFlow.OnScrollPositionListener onScrollListener() {
