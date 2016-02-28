@@ -3,8 +3,11 @@ package com.danandfranz.filmtosee;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
@@ -26,6 +29,7 @@ import android.widget.TextView;
 import java.io.IOException;
 import java.lang.reflect.Field;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
 
@@ -57,6 +61,8 @@ public class InsideGroupActivity  extends AppCompatActivity {
     private String ridFilm;
     private String ridUser;
 
+    private RelativeLayout content_group_layout;
+
     OkHttpClient client;
     ProgressDialog progressDialog;
     private ViewPagerAdapter fragmentAdapter;
@@ -83,7 +89,7 @@ public class InsideGroupActivity  extends AppCompatActivity {
         session = new SessionManager(getApplicationContext());
         HashMap<String, String> user = session.getUserDetails();
         ridUser = user.get(SessionManager.KEY_RID);
-
+        content_group_layout=(RelativeLayout) findViewById(R.id.content_group_layout);
 
 
         client = new OkHttpClient();
@@ -357,11 +363,77 @@ public class InsideGroupActivity  extends AppCompatActivity {
                 .content("Are you sure you want to leave and delete this Group?")
                 .theme(Theme.LIGHT)
                 .positiveText("Yes")
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        leaveGroup(getGroupRid(),getUserRid());
+                    }
+                })
                 .negativeText("Cancel")
                 .icon(this.getResources().getDrawable(R.drawable.ic_delete_24dp))
                 .show();
 
     }
+
+
+    private void leaveGroup(String groupRid, String userRid){
+
+
+        RequestBody body;
+        body = new FormBody.Builder()
+                .add("get","leaveGroup")
+                .add("groupRid",groupRid)
+                .add("userRid", userRid)
+                .build();
+        try {
+            Util.post(body,client, new Callback() {
+                @Override public void onFailure(Call call, IOException e) {
+                    e.printStackTrace();
+                }
+
+                @Override public void onResponse(Call call , Response response) throws IOException {
+                    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+                    //System.out.println(response.body().toString());
+                    try {
+                        String json = response.body().string();
+                        Log.d(TAG,json);
+                        JSONObject jsonObj = new JSONObject(json);
+                        String result = jsonObj.getString("result");
+                        Log.d(TAG, result);
+                        if (result.equalsIgnoreCase("success")) {
+                          /* .runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    //Handle UI here
+                                    //findViewById(R.id.loading).setVisibility(View.GONE);
+
+                                    Snackbar.make(content_group_layout, "Operation completed succesfully", Snackbar.LENGTH_LONG)
+                                            .setAction("Close", new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v) {
+                                                    // Perform anything for the action selected
+                                                }
+                                            }).setDuration(Snackbar.LENGTH_LONG).show();
+
+                                }
+                            });*/
+                            finish();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+
 
     private void getFilmJsonByGroup(String rid, String ridUser) throws IOException {
         RequestBody body = new FormBody.Builder()

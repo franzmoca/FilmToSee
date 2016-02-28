@@ -88,6 +88,8 @@ public class OneFragment extends Fragment{
         plot = (TextView) InputFragmentView.findViewById(R.id.plot);
         imdbVote = (TextView) InputFragmentView.findViewById(R.id.imdbVote);
 
+
+
         //// TODO
         //prendere numero like e unlike e settarli
         //quando faccio like o unlike chiamata post
@@ -118,40 +120,46 @@ public class OneFragment extends Fragment{
 
             btnUnlike.setBackgroundResource(R.drawable.thumbs_down_unselected);
             btnLike.setBackgroundResource(R.drawable.thumbs_up_unselected);
+            int likes=film.getLike();
+            int unlikes=film.getDislike();
+
+            textViewLike.setText("" + likes);
+            textViewUnlike.setText("" + unlikes);
 
            if(film.isLiked()){
                // btnLike.setEnabled(false);
                // btnUnlike.setEnabled(false);
-                if(!film.isMyLike()){
-                    btnUnlike.setBackgroundResource(R.drawable.thumbs_down_selected);
-                    btnLike.setEnabled(false);
-                    btnUnlike.setEnabled(true);
-                }else{
-                    btnLike.setBackgroundResource(R.drawable.thumbs_up_selected);
-                    btnLike.setEnabled(true);
-                    btnUnlike.setEnabled(false);
-                }
+               if(film.isMyLike()=="false"){
+                   btnUnlike.setBackgroundResource(R.drawable.thumbs_down_selected);
+                   btnLike.setEnabled(false);
+                   btnUnlike.setEnabled(true);
+
+               }else{
+                   btnLike.setBackgroundResource(R.drawable.thumbs_up_selected);
+                   btnLike.setEnabled(true);
+                   btnUnlike.setEnabled(false);
+               }
+
 
                btnLike.setOnClickListener(new View.OnClickListener() {
                    @Override
                    public void onClick(View v) {
-                       if(!film.isLiked()){
+
                            //DA INVERTIRE NEL MODO GIUSTO GLI ID DOPO CHE FRANZ SI SVEGLIA
-                           String groupId=((InsideGroupActivity)getActivity()).getUserRid();
-                           String userId=((InsideGroupActivity)getActivity()).getGroupRid();
+                           String groupId = ((InsideGroupActivity) getActivity()).getGroupRid();
+                           String userId = ((InsideGroupActivity) getActivity()).getUserRid();
                            try {
 
-                               tolgoLike(groupId,userId,film.getImdbID(),true);
+                               tolgoLike(userId, groupId, film.getImdbID());
 
 
-
-                               btnLike.setBackgroundResource(R.drawable.thumbs_up_selected);
+                               btnLike.setBackgroundResource(R.drawable.thumbs_up_unselected);
                                int textLike = Integer.parseInt(textViewLike.getText().toString());
                                textLike = textLike - 1;
                                textViewLike.setText("" + textLike);
-                               btnLike.setEnabled(false);
-                               btnUnlike.setEnabled(false);
-                               film.setIsLiked(false);
+
+                               film.setIsLiked(true);
+                              // film.setMyLike(null);
 
                            } catch (IOException e) {
                                e.printStackTrace();
@@ -165,7 +173,7 @@ public class OneFragment extends Fragment{
                            }
 
 
-                       }
+
 
                    }
                });
@@ -173,21 +181,20 @@ public class OneFragment extends Fragment{
                btnUnlike.setOnClickListener(new View.OnClickListener() {
                    @Override
                    public void onClick(View v) {
-                       if(!film.isLiked()){
+
                            //DA INVERTIRE NEL MODO GIUSTO GLI ID DOPO CHE FRANZ SI SVEGLIA
-                           String groupId=((InsideGroupActivity)getActivity()).getUserRid();
-                           String userId=((InsideGroupActivity)getActivity()).getGroupRid();
+                           String groupId = ((InsideGroupActivity) getActivity()).getGroupRid();
+                           String userId = ((InsideGroupActivity) getActivity()).getUserRid();
                            try {
-                               tolgoLike(groupId, userId, film.getImdbID(), false);
+                               tolgoLike(userId, groupId, film.getImdbID());
 
 
-                               btnUnlike.setBackgroundResource(R.drawable.thumbs_down_selected);
+                               btnUnlike.setBackgroundResource(R.drawable.thumbs_down_unselected);
                                int textUnlike = Integer.parseInt(textViewUnlike.getText().toString());
                                textUnlike = textUnlike - 1;
                                textViewUnlike.setText("" + textUnlike);
-                               btnLike.setEnabled(false);
-                               btnUnlike.setEnabled(false);
-                               film.setIsLiked(false);
+
+                               film.setIsLiked(true);
 
                            } catch (IOException e) {
                                e.printStackTrace();
@@ -202,16 +209,14 @@ public class OneFragment extends Fragment{
 
 
 
-
-
-
-
-                       }
                    }
                });
 
 
-            }else {
+
+
+
+           }else {
                btnLike.setEnabled(true);
                btnUnlike.setEnabled(true);
 
@@ -220,11 +225,11 @@ public class OneFragment extends Fragment{
                    public void onClick(View v) {
                        if (!film.isLiked()) {
                            //DA INVERTIRE NEL MODO GIUSTO GLI ID DOPO CHE FRANZ SI SVEGLIA
-                           String groupId = ((InsideGroupActivity) getActivity()).getUserRid();
-                           String userId = ((InsideGroupActivity) getActivity()).getGroupRid();
+                           String groupId = ((InsideGroupActivity) getActivity()).getGroupRid();
+                           String userId = ((InsideGroupActivity) getActivity()).getUserRid();
                            try {
 
-                               setLike(groupId, userId, film.getImdbID(), true);
+                               setLike(userId, groupId, film.getImdbID(), true);
 
 
                                btnLike.setBackgroundResource(R.drawable.thumbs_up_selected);
@@ -257,10 +262,10 @@ public class OneFragment extends Fragment{
                    public void onClick(View v) {
                        if (!film.isLiked()) {
                            //DA INVERTIRE NEL MODO GIUSTO GLI ID DOPO CHE FRANZ SI SVEGLIA
-                           String groupId = ((InsideGroupActivity) getActivity()).getUserRid();
-                           String userId = ((InsideGroupActivity) getActivity()).getGroupRid();
+                           String groupId = ((InsideGroupActivity) getActivity()).getGroupRid();
+                           String userId = ((InsideGroupActivity) getActivity()).getUserRid();
                            try {
-                               setLike(groupId, userId, film.getImdbID(), false);
+                               setLike(userId, groupId, film.getImdbID(), false);
 
 
                                btnUnlike.setBackgroundResource(R.drawable.thumbs_down_selected);
@@ -287,8 +292,7 @@ public class OneFragment extends Fragment{
                    }
                });
 
-               textViewLike.setText("" + film.getLike());
-               textViewUnlike.setText("" + film.getDislike());
+
            }
         }else {
 
@@ -325,6 +329,7 @@ public class OneFragment extends Fragment{
         Log.d("groupRid",groupRid);
         Log.d("id_film",id_film);
         Log.d("bool_like",String.valueOf(thumbs));
+
         RequestBody body = new FormBody.Builder()
                 .add("get", "likes")
                 .add("userRid", userRid)
@@ -369,17 +374,17 @@ public class OneFragment extends Fragment{
 
     }
 
-    public void tolgoLike(String userRid,String groupRid,String id_film,boolean thumbs)throws IOException {
+    public void tolgoLike(String userRid,String groupRid,String id_film)throws IOException {
         Log.d("user",userRid);
         Log.d("groupRid",groupRid);
         Log.d("id_film",id_film);
-        Log.d("bool_like",String.valueOf(thumbs));
+
         RequestBody body = new FormBody.Builder()
-                .add("get", "tolgolikes")
+                .add("get", "tolgoLikes")
                 .add("userRid", userRid)
                 .add("groupRid", groupRid)
                 .add("id_film", id_film)
-                .add("bool_like", String.valueOf(thumbs))
+
                 .build();
 
         Util.post(body, client, new Callback() {

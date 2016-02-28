@@ -72,7 +72,6 @@
 
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textMultiLine"
                     android:id="@+id/insertText"
                     android:ems="10"
                     android:layout_weight="1"
@@ -83,7 +82,8 @@
                     android:hint="Comment"
                     android:singleLine="true"
                     android:selectAllOnFocus="true"
-                    android:isScrollContainer="true" />
+                    android:isScrollContainer="true"
+                    android:inputType="textCapSentences|textShortMessage" />
             </android.support.design.widget.TextInputLayout>
 
             <RelativeLayout

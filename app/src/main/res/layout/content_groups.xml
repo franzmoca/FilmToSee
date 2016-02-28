@@ -14,6 +14,7 @@
     tools:showIn="@layout/app_bar_groups"
     android:background="@drawable/pattern_home"
     android:tileMode="repeat"
+    android:id="@+id/content_group_layout"
     >
     <it.gmariotti.cardslib.library.recyclerview.view.CardRecyclerView
         android:layout_width="match_parent"

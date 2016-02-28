@@ -19,7 +19,7 @@ public class Film {
     private String imdbID;
     private int like;
     private int dislike;
-    private boolean myLike;
+    private String myLike;
     private boolean liked;
     private boolean add;
 
@@ -50,7 +50,7 @@ public class Film {
 
             like= filmJson.getInt("likes");
             dislike= filmJson.getInt("unlikes");
-            myLike= Boolean.parseBoolean(filmJson.getString("myLike"));
+            myLike=filmJson.getString("myLike");
             liked= Boolean.parseBoolean(filmJson.getString("liked"));
            //comm
 
@@ -165,14 +165,18 @@ public class Film {
         return add;
     }
 
-    public boolean isMyLike() {
+    public String isMyLike() {
         return myLike;
     }
+
+    public void setMyLike(String myLike) { this.myLike=myLike;}
+
 
     public boolean isLiked() {
         return liked;
     }
     public void setIsLiked(boolean liked) {
-        this.liked = liked;
+        this.liked=liked;
+
     }
 }

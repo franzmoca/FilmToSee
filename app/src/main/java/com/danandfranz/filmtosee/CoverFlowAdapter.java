@@ -2,8 +2,11 @@ package com.danandfranz.filmtosee;
 
 import android.app.ProgressDialog;
 import android.graphics.Bitmap;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 
 
@@ -16,8 +19,10 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiskCache;
@@ -30,8 +35,19 @@ import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nostra13.universalimageloader.utils.StorageUtils;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class CoverFlowAdapter extends BaseAdapter {
 
@@ -40,9 +56,14 @@ public class CoverFlowAdapter extends BaseAdapter {
     public ImageLoader imageLoader;
     DisplayImageOptions options;
     ProgressDialog sp;
+    OkHttpClient client;
+    private String TAG = "CoverFlowAdapter";
+
+
 
 
     public CoverFlowAdapter(AppCompatActivity context, ArrayList<Film> objects) {
+        client = new OkHttpClient();
         this.activity = context;
         this.data = objects;
         //Creo Cache
@@ -95,6 +116,7 @@ public class CoverFlowAdapter extends BaseAdapter {
             LayoutInflater inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.item_flow_view, null, false);
 
+
             viewHolder = new ViewHolder(convertView);
             convertView.setTag(viewHolder);
         } else {
@@ -127,6 +149,7 @@ public class CoverFlowAdapter extends BaseAdapter {
                     display(image, data.get(position).getImageLink());
                     //image.setImageResource(getItem(position).getImageSource());
                     Button delete = (Button) dialog.findViewById(R.id.removeFilm);
+
                     delete.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -138,6 +161,13 @@ public class CoverFlowAdapter extends BaseAdapter {
                                     .positiveText("Yes")
                                     .negativeText("Cancel")
                                     .icon(ContextCompat.getDrawable(activity, R.drawable.ic_delete_24dp))
+                                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                        @Override
+                                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                                            removeFilm(((InsideGroupActivity)activity).getGroupRid(), ((InsideGroupActivity)activity).getUserRid(), getItem(position).getImdbID());
+                                        }
+                                    })
                                     .show();
 
                         }
@@ -150,6 +180,72 @@ public class CoverFlowAdapter extends BaseAdapter {
             }
         };
     }
+
+
+
+    private void removeFilm(String groupRid, String userRid, String id_film){
+
+
+        RequestBody body;
+        Log.d("groupRid", groupRid);
+        Log.d("userRid", userRid);
+        Log.d("id_film",id_film);
+
+
+        body = new FormBody.Builder()
+                .add("get","removeFilmFromGroup")
+                .add("groupRid", groupRid)
+                .add("userRid", userRid)
+                .add("id_film", id_film)
+                .build();
+        try {
+            Util.post(body,client, new Callback() {
+                @Override public void onFailure(Call call, IOException e) {
+                    e.printStackTrace();
+                }
+
+                @Override public void onResponse(Call call , Response response) throws IOException {
+                    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+                    //System.out.println(response.body().toString());
+                    try {
+                        String json = response.body().string();
+                        Log.d(TAG, json);
+                        JSONObject jsonObj = new JSONObject(json);
+                        String result = jsonObj.getString("result");
+                        Log.d(TAG, result);
+
+                        if (result.equalsIgnoreCase("success")) {
+                         /*
+                            InsideGroupActivity.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    //Handle UI here
+                                    //findViewById(R.id.loading).setVisibility(View.GONE);
+
+                                    Snackbar.make(InsideGrActivity, "Operation completed succesfully", Snackbar.LENGTH_LONG)
+                                            .setAction("Close", new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v) {
+                                                    // Perform anything for the action selected
+                                                }
+                                            }).setDuration(Snackbar.LENGTH_LONG).show();
+
+                                }
+                            });*/
+
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void display(ImageView img, String url)
     {
         imageLoader.displayImage(url, img, options, new ImageLoadingListener() {
