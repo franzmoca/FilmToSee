@@ -75,6 +75,7 @@ public class OneFragment extends Fragment{
     private TextView addYear;
     private DisplayImageOptions options;
     private ImageView poster;
+    private Button btnSelectFilm;
 
 
     public OneFragment() {
@@ -122,6 +123,8 @@ public class OneFragment extends Fragment{
         imdbVote = (TextView) InputFragmentView.findViewById(R.id.imdbVote);
 
         btnAddFilm = (Button) InputFragmentView.findViewById(R.id.button_addMovie);
+        btnSelectFilm = (Button) InputFragmentView.findViewById(R.id.button_selectMovie);
+
 
         addTitle = (TextView) InputFragmentView.findViewById(R.id.add_title);
         addYear = (TextView) InputFragmentView.findViewById(R.id.add_year);
@@ -163,11 +166,11 @@ public class OneFragment extends Fragment{
 
             textViewLike.setText("" + likes);
             textViewUnlike.setText("" + unlikes);
-/*
-           if(film.isLiked()){
+
+           if(film.isLiked().equalsIgnoreCase("true")){
                // btnLike.setEnabled(false);
                // btnUnlike.setEnabled(false);
-               if(film.isMyLike()=="false"){
+               if(!film.isMyLike()){
                    btnUnlike.setBackgroundResource(R.drawable.thumbs_down_selected);
                    btnLike.setEnabled(false);
                    btnUnlike.setEnabled(true);
@@ -183,7 +186,6 @@ public class OneFragment extends Fragment{
                    @Override
                    public void onClick(View v) {
 
-                           //DA INVERTIRE NEL MODO GIUSTO GLI ID DOPO CHE FRANZ SI SVEGLIA
                            String groupId = ((InsideGroupActivity) getActivity()).getGroupRid();
                            String userId = ((InsideGroupActivity) getActivity()).getUserRid();
                            try {
@@ -194,10 +196,9 @@ public class OneFragment extends Fragment{
                                btnLike.setBackgroundResource(R.drawable.thumbs_up_unselected);
                                int textLike = Integer.parseInt(textViewLike.getText().toString());
                                textLike = textLike - 1;
+                               ((InsideGroupActivity) getActivity()).setLikeUnlike(film.getImdbID(), textLike, film.getDislike(), "false", false);
                                textViewLike.setText("" + textLike);
 
-                               film.setIsLiked(true);
-                              // film.setMyLike(null);
 
                            } catch (IOException e) {
                                e.printStackTrace();
@@ -220,7 +221,6 @@ public class OneFragment extends Fragment{
                    @Override
                    public void onClick(View v) {
 
-                           //DA INVERTIRE NEL MODO GIUSTO GLI ID DOPO CHE FRANZ SI SVEGLIA
                            String groupId = ((InsideGroupActivity) getActivity()).getGroupRid();
                            String userId = ((InsideGroupActivity) getActivity()).getUserRid();
                            try {
@@ -230,9 +230,11 @@ public class OneFragment extends Fragment{
                                btnUnlike.setBackgroundResource(R.drawable.thumbs_down_unselected);
                                int textUnlike = Integer.parseInt(textViewUnlike.getText().toString());
                                textUnlike = textUnlike - 1;
+                               ((InsideGroupActivity) getActivity()).setLikeUnlike(film.getImdbID(), film.getLike() , textUnlike, "false" , false);
+
                                textViewUnlike.setText("" + textUnlike);
 
-                               film.setIsLiked(true);
+                               film.setIsLiked("true");
 
                            } catch (IOException e) {
                                e.printStackTrace();
@@ -261,8 +263,7 @@ public class OneFragment extends Fragment{
                btnLike.setOnClickListener(new View.OnClickListener() {
                    @Override
                    public void onClick(View v) {
-                       if (!film.isLiked()) {
-                           //DA INVERTIRE NEL MODO GIUSTO GLI ID DOPO CHE FRANZ SI SVEGLIA
+                       if (film.isLiked().equalsIgnoreCase("true")) {
                            String groupId = ((InsideGroupActivity) getActivity()).getGroupRid();
                            String userId = ((InsideGroupActivity) getActivity()).getUserRid();
                            try {
@@ -273,10 +274,13 @@ public class OneFragment extends Fragment{
                                btnLike.setBackgroundResource(R.drawable.thumbs_up_selected);
                                int textLike = Integer.parseInt(textViewLike.getText().toString());
                                textLike = textLike + 1;
+                               Log.d(TAG,film.getImdbID());
+                               ((InsideGroupActivity) getActivity()).setLikeUnlike(film.getImdbID(), textLike, film.getDislike(), "true", true);
+
                                textViewLike.setText("" + textLike);
                                btnLike.setEnabled(false);
                                btnUnlike.setEnabled(false);
-                               film.setIsLiked(false);
+                               film.setIsLiked("false");
 
                            } catch (IOException e) {
                                e.printStackTrace();
@@ -298,7 +302,7 @@ public class OneFragment extends Fragment{
                btnUnlike.setOnClickListener(new View.OnClickListener() {
                    @Override
                    public void onClick(View v) {
-                       if (!film.isLiked()) {
+                       if (film.isLiked().equalsIgnoreCase("false")) {
                            //DA INVERTIRE NEL MODO GIUSTO GLI ID DOPO CHE FRANZ SI SVEGLIA
                            String groupId = ((InsideGroupActivity) getActivity()).getGroupRid();
                            String userId = ((InsideGroupActivity) getActivity()).getUserRid();
@@ -309,10 +313,12 @@ public class OneFragment extends Fragment{
                                btnUnlike.setBackgroundResource(R.drawable.thumbs_down_selected);
                                int textUnlike = Integer.parseInt(textViewUnlike.getText().toString());
                                textUnlike = textUnlike + 1;
+                               ((InsideGroupActivity) getActivity()).setLikeUnlike(film.getImdbID(), film.getLike() , textUnlike , "true" , false);
+
                                textViewUnlike.setText("" + textUnlike);
                                btnLike.setEnabled(false);
                                btnUnlike.setEnabled(false);
-                               film.setIsLiked(false);
+                               film.setIsLiked("false");
 
                            } catch (IOException e) {
                                e.printStackTrace();
@@ -331,12 +337,13 @@ public class OneFragment extends Fragment{
                });
 
 
-           }*/
+           }
         }else {
 
             relativeDetails.setVisibility(View.GONE);
             relativeFilmAdd.setVisibility(View.VISIBLE);
-            btnAddFilm.setOnClickListener(new View.OnClickListener() {
+
+            btnSelectFilm.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     ((InsideGroupActivity) getActivity()).addFilm();
@@ -481,6 +488,8 @@ public class OneFragment extends Fragment{
             addYear.setText(film.getYear());
             imageLoader.displayImage(film.getImageLink(), poster);
             Log.d(TAG, film.getImdbID());
+            btnSelectFilm.setVisibility(View.GONE);
+            btnAddFilm.setVisibility(View.VISIBLE);
 
             btnAddFilm.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -527,8 +536,9 @@ public class OneFragment extends Fragment{
                             // Perform anything for the action selected
                         }
                     }).setDuration(Snackbar.LENGTH_LONG).show();
-
-
+            btnSelectFilm.setVisibility(View.VISIBLE);
+            btnAddFilm.setVisibility(View.GONE);
+            addMoveDetails.setVisibility(View.GONE);
 
         }
     }

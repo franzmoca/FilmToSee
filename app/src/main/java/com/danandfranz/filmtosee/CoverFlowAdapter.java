@@ -3,7 +3,6 @@ package com.danandfranz.filmtosee;
 import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -217,24 +216,7 @@ public class CoverFlowAdapter extends BaseAdapter {
                         Log.d(TAG, result);
 
                         if (result.equalsIgnoreCase("success")) {
-                         /*
-                            InsideGroupActivity.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    //Handle UI here
-                                    //findViewById(R.id.loading).setVisibility(View.GONE);
-
-                                    Snackbar.make(InsideGrActivity, "Operation completed succesfully", Snackbar.LENGTH_LONG)
-                                            .setAction("Close", new View.OnClickListener() {
-                                                @Override
-                                                public void onClick(View v) {
-                                                    // Perform anything for the action selected
-                                                }
-                                            }).setDuration(Snackbar.LENGTH_LONG).show();
-
-                                }
-                            });*/
-
+                            ((InsideGroupActivity)activity).restartActivity();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();

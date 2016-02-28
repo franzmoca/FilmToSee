@@ -71,6 +71,8 @@ public class InsideGroupActivity  extends AppCompatActivity {
     ProgressDialog progressDialog;
     private ViewPagerAdapter fragmentAdapter;
     SessionManager session;
+    RelativeLayout rootlayout;
+
 
 
 
@@ -85,6 +87,8 @@ public class InsideGroupActivity  extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inside_group);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        rootlayout = (RelativeLayout) findViewById(R.id.rootlayoutInside);
+
 
         progressDialog = new ProgressDialog(InsideGroupActivity.this);
         progressDialog.setIndeterminate(true);
@@ -207,6 +211,7 @@ public class InsideGroupActivity  extends AppCompatActivity {
                 Film film = coverFlowAdapter.getItem(position);
                 TabLayout.Tab details = tabLayout.getTabAt(0);
                 TabLayout.Tab comments = tabLayout.getTabAt(1);
+                Log.d(TAG,""+film.isLiked());
 
                 if(film.isAdd()){
 
@@ -268,6 +273,7 @@ public class InsideGroupActivity  extends AppCompatActivity {
                 //END OF COVER FLOW
                 progressDialog.hide();
 
+
             }
         });
     }
@@ -278,6 +284,7 @@ public class InsideGroupActivity  extends AppCompatActivity {
         switch (item.getItemId()) {
 
             case R.id.addFilmGroup:
+
                 addFilm();
                 return true;
 
@@ -336,6 +343,36 @@ public class InsideGroupActivity  extends AppCompatActivity {
 
     public ArrayList<Film> getFilms() {
         return films;
+    }
+    public void setLikeUnlike(String imdbID , int like, int dislike,String liked,boolean mylike){
+
+        Film film = null;
+        int position = 1;
+        int e = 0 ;
+        boolean loop = true;
+        while(loop){
+        //for(position = 0 ; position < films.size() ; position++){
+
+             film = films.get(position);
+
+             Log.d(TAG,film.getImdbID());
+            if(film.getImdbID().equals(imdbID)) {
+                e = position;
+                film.setLike(like);
+                film.setDislike(dislike);
+                film.setIsLiked(liked);
+                Log.d(TAG, "" + film.isLiked());
+                film.setMyLike(mylike);
+                loop = false;
+            }
+            position++;
+
+            if(position >= films.size()){
+                loop = false;
+            }
+        }
+
+      films.set(e,film);
     }
 
 
@@ -422,22 +459,6 @@ public class InsideGroupActivity  extends AppCompatActivity {
                         String result = jsonObj.getString("result");
                         Log.d(TAG, result);
                         if (result.equalsIgnoreCase("success")) {
-                          /* .runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    //Handle UI here
-                                    //findViewById(R.id.loading).setVisibility(View.GONE);
-
-                                    Snackbar.make(content_group_layout, "Operation completed succesfully", Snackbar.LENGTH_LONG)
-                                            .setAction("Close", new View.OnClickListener() {
-                                                @Override
-                                                public void onClick(View v) {
-                                                    // Perform anything for the action selected
-                                                }
-                                            }).setDuration(Snackbar.LENGTH_LONG).show();
-
-                                }
-                            });*/
                             finish();
                         }
                     } catch (JSONException e) {
@@ -467,14 +488,14 @@ public class InsideGroupActivity  extends AppCompatActivity {
 
                             addMemberToGroup(getGroupRid(),input.toString());
                         } else {
-/*
+
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
                                     //Handle UI here
                                     //findViewById(R.id.loading).setVisibility(View.GONE);
 
-                                    Snackbar.make(content_group_layout, "Please insert a username with more than 3 letters", Snackbar.LENGTH_LONG)
+                                    Snackbar.make(rootlayout, "Please insert a username with more than 3 letters", Snackbar.LENGTH_LONG)
                                             .setAction("Close", new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View v) {
@@ -483,7 +504,7 @@ public class InsideGroupActivity  extends AppCompatActivity {
                                             }).setDuration(Snackbar.LENGTH_LONG).show();
 
                                 }
-                            });*/
+                            });
 
                         }
                     }
@@ -520,22 +541,23 @@ public class InsideGroupActivity  extends AppCompatActivity {
                         String result = jsonObj.getString("result");
                         Log.d(TAG, result);
                         if (result.equalsIgnoreCase("success")) {
-                          /*  runOnUiThread(new Runnable() {
+                            runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
                                     //Handle UI here
                                     //findViewById(R.id.loading).setVisibility(View.GONE);
 
-                                    Snackbar.make((InsideGroupActivity.getActivity()), "Member added successfully", Snackbar.LENGTH_LONG)
+                                    Snackbar.make(rootlayout, "Member added successfully", Snackbar.LENGTH_LONG)
                                             .setAction("Close", new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View v) {
                                                     // Perform anything for the action selected
                                                 }
                                             }).setDuration(Snackbar.LENGTH_LONG).show();
+                                    restartActivity();
 
                                 }
-                            });*/
+                            });
 
                         }
                     } catch (JSONException e) {
@@ -546,7 +568,7 @@ public class InsideGroupActivity  extends AppCompatActivity {
                                 //Handle UI here
                                 //findViewById(R.id.loading).setVisibility(View.GONE);
 
-                                Snackbar.make(content_group_layout, "Operation failed", Snackbar.LENGTH_LONG)
+                                Snackbar.make(rootlayout, "Operation failed", Snackbar.LENGTH_LONG)
                                         .setAction("Try Again", new View.OnClickListener() {
                                             @Override
                                             public void onClick(View v) {
@@ -620,7 +642,6 @@ public class InsideGroupActivity  extends AppCompatActivity {
     }
 
     public void addFilm(){
-        coverFlow.setSelection(0);
         boolean wrapInScrollView = true;
         final Film[] filmToAdd = new Film[1];
         final MaterialDialog filmdialog = new MaterialDialog.Builder(this)
@@ -636,6 +657,9 @@ public class InsideGroupActivity  extends AppCompatActivity {
 
                         InputMethodManager im = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
                         im.hideSoftInputFromWindow(filmTitle.getWindowToken(), 0);
+                        if(coverFlow.getScrollPosition()!=0){
+                            coverFlow.scrollToPosition(1);
+                        }
                         if (filmToAdd[0] != null && filmToAdd[0].getTitle().equalsIgnoreCase(filmTitle.getText().toString())  ) {
                             OneFragment one = (OneFragment) fragmentAdapter.getItem(0);
                             one.setAddMovieDetails(filmToAdd[0]);
@@ -711,8 +735,7 @@ public class InsideGroupActivity  extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                RelativeLayout rootlayout = (RelativeLayout) findViewById(R.id.rootlayoutInside);
-                                Snackbar.make(rootlayout, "The film selecter doesn't exist!", Snackbar.LENGTH_LONG)
+                                Snackbar.make(rootlayout, "The film selected doesn't exist!", Snackbar.LENGTH_LONG)
                                         .setAction("Close", new View.OnClickListener() {
                                             @Override
                                             public void onClick(View v) {

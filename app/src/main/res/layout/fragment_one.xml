@@ -426,10 +426,22 @@
             android:layout_marginBottom="24dp"
             android:layout_below="@+id/add_movieDetails"
             android:padding="12dp"
-            android:text="Add Film!"
+            android:visibility="gone"
+            android:text="Add Film to Group!"
+            />
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/button_selectMovie"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="24dp"
+            android:layout_below="@+id/add_movieDetails"
+            android:padding="12dp"
+            android:text="Select Film!"
             />
 
-        </RelativeLayout>
+
+    </RelativeLayout>
     </RelativeLayout>
 
 </ScrollView>
