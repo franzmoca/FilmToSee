@@ -124,81 +124,81 @@ public class OneFragment extends Fragment{
                // btnUnlike.setEnabled(false);
                 if(!film.isMyLike()){
                     btnUnlike.setBackgroundResource(R.drawable.thumbs_down_selected);
+                    btnLike.setEnabled(false);
+                    btnUnlike.setEnabled(true);
                 }else{
                     btnLike.setBackgroundResource(R.drawable.thumbs_up_selected);
-
-
+                    btnLike.setEnabled(true);
+                    btnUnlike.setEnabled(false);
                 }
 
-            }else{
-                btnLike.setEnabled(true);
-                btnUnlike.setEnabled(true);
+               btnLike.setOnClickListener(new View.OnClickListener() {
+                   @Override
+                   public void onClick(View v) {
+                       if(!film.isLiked()){
+                           //DA INVERTIRE NEL MODO GIUSTO GLI ID DOPO CHE FRANZ SI SVEGLIA
+                           String groupId=((InsideGroupActivity)getActivity()).getUserRid();
+                           String userId=((InsideGroupActivity)getActivity()).getGroupRid();
+                           try {
 
-                btnLike.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if(!film.isLiked()){
-                            String groupId=((InsideGroupActivity)getActivity()).getGroupRid();
-                            String userId=((InsideGroupActivity)getActivity()).getUserRid();
-                            try {
-
-                                setLike(groupId,userId,film.getImdbID(),true);
+                               tolgoLike(groupId,userId,film.getImdbID(),true);
 
 
 
-                                btnLike.setBackgroundResource(R.drawable.thumbs_up_selected);
-                                int textLike = Integer.parseInt(textViewLike.getText().toString());
-                                textLike = textLike + 1;
-                                textViewLike.setText("" + textLike);
-                                btnLike.setEnabled(false);
-                                btnUnlike.setEnabled(false);
-                                film.setIsLiked(false);
+                               btnLike.setBackgroundResource(R.drawable.thumbs_up_selected);
+                               int textLike = Integer.parseInt(textViewLike.getText().toString());
+                               textLike = textLike - 1;
+                               textViewLike.setText("" + textLike);
+                               btnLike.setEnabled(false);
+                               btnUnlike.setEnabled(false);
+                               film.setIsLiked(false);
 
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                                getActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Snackbar.make(relativeFilmAdd, "Error occured", Snackbar.LENGTH_LONG)
-                                                .setDuration(Snackbar.LENGTH_LONG).show();
-                                    }
-                                });
-                            }
-
-
-                        }
-
-                    }
-                });
-
-                btnUnlike.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if(!film.isLiked()){
-                            String groupId=((InsideGroupActivity)getActivity()).getGroupRid();
-                            String userId=((InsideGroupActivity)getActivity()).getUserRid();
-                            try {
-                                setLike(groupId,userId,film.getImdbID(),false);
+                           } catch (IOException e) {
+                               e.printStackTrace();
+                               getActivity().runOnUiThread(new Runnable() {
+                                   @Override
+                                   public void run() {
+                                       Snackbar.make(relativeFilmAdd, "Error occured", Snackbar.LENGTH_LONG)
+                                               .setDuration(Snackbar.LENGTH_LONG).show();
+                                   }
+                               });
+                           }
 
 
-                                btnUnlike.setBackgroundResource(R.drawable.thumbs_down_selected);
-                                int textUnlike = Integer.parseInt(textViewUnlike.getText().toString());
-                                textUnlike = textUnlike + 1;
-                                textViewUnlike.setText("" + textUnlike);
-                                btnLike.setEnabled(false);
-                                btnUnlike.setEnabled(false);
-                                film.setIsLiked(false);
+                       }
 
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                                getActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Snackbar.make(relativeFilmAdd, "Error occured", Snackbar.LENGTH_LONG)
-                                                .setDuration(Snackbar.LENGTH_LONG).show();
-                                    }
-                                });
-                            }
+                   }
+               });
+
+               btnUnlike.setOnClickListener(new View.OnClickListener() {
+                   @Override
+                   public void onClick(View v) {
+                       if(!film.isLiked()){
+                           //DA INVERTIRE NEL MODO GIUSTO GLI ID DOPO CHE FRANZ SI SVEGLIA
+                           String groupId=((InsideGroupActivity)getActivity()).getUserRid();
+                           String userId=((InsideGroupActivity)getActivity()).getGroupRid();
+                           try {
+                               tolgoLike(groupId, userId, film.getImdbID(), false);
+
+
+                               btnUnlike.setBackgroundResource(R.drawable.thumbs_down_selected);
+                               int textUnlike = Integer.parseInt(textViewUnlike.getText().toString());
+                               textUnlike = textUnlike - 1;
+                               textViewUnlike.setText("" + textUnlike);
+                               btnLike.setEnabled(false);
+                               btnUnlike.setEnabled(false);
+                               film.setIsLiked(false);
+
+                           } catch (IOException e) {
+                               e.printStackTrace();
+                               getActivity().runOnUiThread(new Runnable() {
+                                   @Override
+                                   public void run() {
+                                       Snackbar.make(relativeFilmAdd, "Error occured", Snackbar.LENGTH_LONG)
+                                               .setDuration(Snackbar.LENGTH_LONG).show();
+                                   }
+                               });
+                           }
 
 
 
@@ -206,13 +206,90 @@ public class OneFragment extends Fragment{
 
 
 
-                        }
-                    }
-                });
-            }
-            textViewLike.setText("" + film.getLike());
-            textViewUnlike.setText("" + film.getDislike());
+                       }
+                   }
+               });
 
+
+            }else {
+               btnLike.setEnabled(true);
+               btnUnlike.setEnabled(true);
+
+               btnLike.setOnClickListener(new View.OnClickListener() {
+                   @Override
+                   public void onClick(View v) {
+                       if (!film.isLiked()) {
+                           //DA INVERTIRE NEL MODO GIUSTO GLI ID DOPO CHE FRANZ SI SVEGLIA
+                           String groupId = ((InsideGroupActivity) getActivity()).getUserRid();
+                           String userId = ((InsideGroupActivity) getActivity()).getGroupRid();
+                           try {
+
+                               setLike(groupId, userId, film.getImdbID(), true);
+
+
+                               btnLike.setBackgroundResource(R.drawable.thumbs_up_selected);
+                               int textLike = Integer.parseInt(textViewLike.getText().toString());
+                               textLike = textLike + 1;
+                               textViewLike.setText("" + textLike);
+                               btnLike.setEnabled(false);
+                               btnUnlike.setEnabled(false);
+                               film.setIsLiked(false);
+
+                           } catch (IOException e) {
+                               e.printStackTrace();
+                               getActivity().runOnUiThread(new Runnable() {
+                                   @Override
+                                   public void run() {
+                                       Snackbar.make(relativeFilmAdd, "Error occured", Snackbar.LENGTH_LONG)
+                                               .setDuration(Snackbar.LENGTH_LONG).show();
+                                   }
+                               });
+                           }
+
+
+                       }
+
+                   }
+               });
+
+               btnUnlike.setOnClickListener(new View.OnClickListener() {
+                   @Override
+                   public void onClick(View v) {
+                       if (!film.isLiked()) {
+                           //DA INVERTIRE NEL MODO GIUSTO GLI ID DOPO CHE FRANZ SI SVEGLIA
+                           String groupId = ((InsideGroupActivity) getActivity()).getUserRid();
+                           String userId = ((InsideGroupActivity) getActivity()).getGroupRid();
+                           try {
+                               setLike(groupId, userId, film.getImdbID(), false);
+
+
+                               btnUnlike.setBackgroundResource(R.drawable.thumbs_down_selected);
+                               int textUnlike = Integer.parseInt(textViewUnlike.getText().toString());
+                               textUnlike = textUnlike + 1;
+                               textViewUnlike.setText("" + textUnlike);
+                               btnLike.setEnabled(false);
+                               btnUnlike.setEnabled(false);
+                               film.setIsLiked(false);
+
+                           } catch (IOException e) {
+                               e.printStackTrace();
+                               getActivity().runOnUiThread(new Runnable() {
+                                   @Override
+                                   public void run() {
+                                       Snackbar.make(relativeFilmAdd, "Error occured", Snackbar.LENGTH_LONG)
+                                               .setDuration(Snackbar.LENGTH_LONG).show();
+                                   }
+                               });
+                           }
+
+
+                       }
+                   }
+               });
+
+               textViewLike.setText("" + film.getLike());
+               textViewUnlike.setText("" + film.getDislike());
+           }
         }else {
 
             relativeDetails.setVisibility(View.GONE);
@@ -244,6 +321,10 @@ public class OneFragment extends Fragment{
 
 
     public void setLike(String userRid,String groupRid,String id_film,boolean thumbs)throws IOException {
+        Log.d("user",userRid);
+        Log.d("groupRid",groupRid);
+        Log.d("id_film",id_film);
+        Log.d("bool_like",String.valueOf(thumbs));
         RequestBody body = new FormBody.Builder()
                 .add("get", "likes")
                 .add("userRid", userRid)
@@ -262,6 +343,56 @@ public class OneFragment extends Fragment{
             public void onResponse(Call call, Response response) throws IOException {
                 if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
                 //System.out.println(response.body().toString());
+                String json = response.body().string();
+                try {
+
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Snackbar.make(relativeFilmAdd, "Like!", Snackbar.LENGTH_LONG)
+                                    .setAction("Close", new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            // Perform anything for the action selected
+                                        }
+                                    }).setDuration(Snackbar.LENGTH_LONG).show();
+                        }
+                    });
+
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
+
+            }
+
+        });
+
+    }
+
+    public void tolgoLike(String userRid,String groupRid,String id_film,boolean thumbs)throws IOException {
+        Log.d("user",userRid);
+        Log.d("groupRid",groupRid);
+        Log.d("id_film",id_film);
+        Log.d("bool_like",String.valueOf(thumbs));
+        RequestBody body = new FormBody.Builder()
+                .add("get", "tolgolikes")
+                .add("userRid", userRid)
+                .add("groupRid", groupRid)
+                .add("id_film", id_film)
+                .add("bool_like", String.valueOf(thumbs))
+                .build();
+
+        Util.post(body, client, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+                //System.out.println(response.body().toString());
+                String json = response.body().string();
                 try {
 
                     getActivity().runOnUiThread(new Runnable() {
