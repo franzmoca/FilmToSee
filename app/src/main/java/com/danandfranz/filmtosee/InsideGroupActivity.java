@@ -332,29 +332,6 @@ public class InsideGroupActivity  extends AppCompatActivity {
     }
     //END SWIPE
 
-    private void addMember() {
-
-        new MaterialDialog.Builder(this)
-                .title("Add Member")
-                .content("Please insert the username of the user you want to add")
-                .theme(Theme.LIGHT)
-                .positiveText("Add Member")
-                .input("Username", "", new MaterialDialog.InputCallback() {
-                    @Override
-                    public void onInput(MaterialDialog dialog, CharSequence input) {
-                        // Do something
-                        if (input.toString().length() > 3) {
-
-
-                        } else {
-
-
-
-                        }
-                    }
-                }).show();
-
-    }
 
     private void LeaveGroup() {
 
@@ -366,7 +343,7 @@ public class InsideGroupActivity  extends AppCompatActivity {
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        leaveGroup(getGroupRid(),getUserRid());
+                        leaveGroup(getGroupRid(), getUserRid());
                     }
                 })
                 .negativeText("Cancel")
@@ -431,6 +408,119 @@ public class InsideGroupActivity  extends AppCompatActivity {
         }
     }
 
+    private void addMember() {
+
+        new MaterialDialog.Builder(this)
+                .title("Add Member")
+                .content("Please insert the username of the user you want to add")
+                .theme(Theme.LIGHT)
+                .positiveText("Add Member")
+                .input("Username", "", new MaterialDialog.InputCallback() {
+                    @Override
+                    public void onInput(MaterialDialog dialog, CharSequence input) {
+                        // Do something
+                        if (input.toString().length() > 3) {
+
+                            addMemberToGroup(getGroupRid(),input.toString());
+                        } else {
+/*
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    //Handle UI here
+                                    //findViewById(R.id.loading).setVisibility(View.GONE);
+
+                                    Snackbar.make(content_group_layout, "Please insert a username with more than 3 letters", Snackbar.LENGTH_LONG)
+                                            .setAction("Close", new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v) {
+                                                    // Perform anything for the action selected
+                                                }
+                                            }).setDuration(Snackbar.LENGTH_LONG).show();
+
+                                }
+                            });*/
+
+                        }
+                    }
+                }).show();
+
+    }
+
+
+    private void addMemberToGroup(String groupRid, String username){
+
+
+        RequestBody body;
+        body = new FormBody.Builder()
+                .add("get","addMemberToGroup")
+                .add("groupRid",groupRid)
+                .add("username", username)
+                .build();
+        try {
+            Util.post(body,client, new Callback() {
+                @Override public void onFailure(Call call, IOException e) {
+                    e.printStackTrace();
+                }
+
+                @Override public void onResponse(Call call , Response response) throws IOException {
+                    if (!response.isSuccessful()){
+                        throw new IOException("Unexpected code " + response);
+
+                    }
+                    //System.out.println(response.body().toString());
+                    try {
+                        String json = response.body().string();
+                        Log.d(TAG,json);
+                        JSONObject jsonObj = new JSONObject(json);
+                        String result = jsonObj.getString("result");
+                        Log.d(TAG, result);
+                        if (result.equalsIgnoreCase("success")) {
+                          /*  runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    //Handle UI here
+                                    //findViewById(R.id.loading).setVisibility(View.GONE);
+
+                                    Snackbar.make((InsideGroupActivity.getActivity()), "Member added successfully", Snackbar.LENGTH_LONG)
+                                            .setAction("Close", new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v) {
+                                                    // Perform anything for the action selected
+                                                }
+                                            }).setDuration(Snackbar.LENGTH_LONG).show();
+
+                                }
+                            });*/
+
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                //Handle UI here
+                                //findViewById(R.id.loading).setVisibility(View.GONE);
+
+                                Snackbar.make(content_group_layout, "Operation failed", Snackbar.LENGTH_LONG)
+                                        .setAction("Try Again", new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                addMember();
+                                            }
+                                        }).setDuration(Snackbar.LENGTH_LONG).show();
+
+                            }
+                        });
+                    }
+
+                }
+
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 
 
