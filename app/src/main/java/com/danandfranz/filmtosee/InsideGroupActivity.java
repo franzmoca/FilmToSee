@@ -655,12 +655,15 @@ public class InsideGroupActivity  extends AppCompatActivity {
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         DelayAutoCompleteTextView filmTitle = (DelayAutoCompleteTextView) dialog.getCustomView().findViewById(R.id.et_book_title);
 
-                        InputMethodManager im = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                        InputMethodManager im = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                         im.hideSoftInputFromWindow(filmTitle.getWindowToken(), 0);
-                        if(coverFlow.getScrollPosition()!=0){
+                        if (coverFlow.getScrollPosition() == 1) {
+                            coverFlow.scrollToPosition(0);
+                        }
+                        if (coverFlow.getScrollPosition() != 0) {
                             coverFlow.scrollToPosition(1);
                         }
-                        if (filmToAdd[0] != null && filmToAdd[0].getTitle().equalsIgnoreCase(filmTitle.getText().toString())  ) {
+                        if (filmToAdd[0] != null && filmToAdd[0].getTitle().equalsIgnoreCase(filmTitle.getText().toString())) {
                             OneFragment one = (OneFragment) fragmentAdapter.getItem(0);
                             one.setAddMovieDetails(filmToAdd[0]);
 
