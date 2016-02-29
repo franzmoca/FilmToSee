@@ -43,6 +43,7 @@ import java.util.HashMap;
 import it.gmariotti.cardslib.library.internal.Card;
 import it.gmariotti.cardslib.library.internal.CardHeader;
 import it.gmariotti.cardslib.library.internal.CardThumbnail;
+import it.gmariotti.cardslib.library.internal.base.BaseCard;
 import it.gmariotti.cardslib.library.recyclerview.internal.CardArrayRecyclerViewAdapter;
 import it.gmariotti.cardslib.library.recyclerview.view.CardRecyclerView;
 import okhttp3.Call;
@@ -61,6 +62,7 @@ public class GroupsActivity extends AppCompatActivity
     OkHttpClient client;
     ProgressDialog progressDialog;
 
+int numFilms;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -161,11 +163,14 @@ public class GroupsActivity extends AppCompatActivity
                         String username = jsonObj.getString("username");
 */
                         final JSONArray groups = jsonObj.getJSONArray("groups");
+
                         GroupsActivity.this.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 //Handle UI here
                                 //findViewById(R.id.loading).setVisibility(View.GONE);
+
+
                                 try {
                                     setCards(groups);
                                 } catch (JSONException e) {
@@ -189,12 +194,15 @@ public class GroupsActivity extends AppCompatActivity
         }
     }
     private void setCards(JSONArray groups) throws JSONException {
+
         ArrayList<Card> cards = new ArrayList<Card>();
 
         for(int i = 0; i<groups.length();i++){
 
             String name = groups.getJSONObject(i).getString("name");
             JSONArray members = groups.getJSONObject(i).getJSONArray("members");
+            String ridGroup= groups.getJSONObject(i).getString("rid");
+
             cards.add(createCard(name,groups.getJSONObject(i)));
         }
 
@@ -215,16 +223,58 @@ public class GroupsActivity extends AppCompatActivity
         Card card = new Card(this);
         String memstr = "";
         JSONArray members = group.getJSONArray("members");
+
+
         for ( int z = 0;z<members.length();z++){
             memstr+=" "+members.getString(z)+" ";
+
+
+            if(z>9){
+                memstr+="...";
+                z=members.length();
+            }
+
         }
-        card.setTitle("8 films to see!" +
-                "   "+memstr+" "); //Aggiorna il numero
+        for ( int y = 0;y<members.length();y++){
+
+
+            switch (y) {
+                case 0:
+                    card.setBackgroundResourceId(R.drawable.demo_card_selector_color5);
+                    break;
+                case 1:
+                    card.setBackgroundResourceId(R.drawable.demo_card_selector_color4);
+                    break;
+                case 2:
+                    card.setBackgroundResourceId(R.drawable.demo_card_selector_color3);
+                    break;
+                case 3:
+                    card.setBackgroundResourceId(R.drawable.demo_card_selector_color2);
+                    break;
+                case 4:
+                    card.setBackgroundResourceId(R.drawable.demo_card_selector_color1);
+                    break;
+                default:
+                    card.setBackgroundResourceId(R.drawable.demo_card_selector_color_default);
+                    break;
+            }
+        }
+
+        card.setTitle(
+                "Members:" + memstr + " "); //Aggiorna il numero
         //Create a CardHeader
         CardHeader header = new CardHeader(this);
         header.setTitle(groupName);
         //Add Header to card
         card.addCardHeader(header);
+       /*
+        header.setPopupMenu(R.menu.popupmain, new CardHeader.OnClickCardHeaderPopupMenuListener() {
+            @Override
+            public void onMenuItemClick(BaseCard card, MenuItem item) {
+                Toast.makeText(GroupsActivity.this, "Click on " + item.getTitle(), Toast.LENGTH_SHORT).show();
+            }
+        });*/
+
 
         //Add ClickListener
         card.setOnClickListener(new Card.OnCardClickListener() {
@@ -357,7 +407,7 @@ public class GroupsActivity extends AppCompatActivity
         RequestBody body;
         body = new FormBody.Builder()
                 .add("get","createGroup")
-                .add("groupName",input)
+                .add("groupName", input)
                 .add("username", name)
                 .build();
         try {
@@ -396,4 +446,44 @@ public class GroupsActivity extends AppCompatActivity
             e.printStackTrace();
         }
     }
+
+
+    private void getGroupFilms(String groupRid){
+
+        RequestBody body;
+        body = new FormBody.Builder()
+                .add("get", "filmOfGrroup")
+                .add("groupRid",groupRid)
+                .build();
+        try {
+            Util.post(body,client, new Callback() {
+                @Override public void onFailure(Call call, IOException e) {
+                    e.printStackTrace();
+                }
+
+                @Override public void onResponse(Call call , Response response) throws IOException {
+                    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+                    //System.out.println(response.body().toString());
+                    try {
+                        String json = response.body().string();
+                        Log.d(TAG,json);
+                        JSONObject jsonObj = new JSONObject(json);
+                        String result = jsonObj.getString("result");
+                        int films= jsonObj.getInt("films");
+                        Log.d(TAG, result);
+                        if (result.equalsIgnoreCase("success")) {
+                                numFilms=films;
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

@@ -17,4 +17,10 @@
     <color name="red_light">#e17c7c</color>
     <color name="red_dark">#944343</color>
 
+    <color name="defaultCard">#F7C636</color>
+    <color name="demo_card_background_color1">#C6C78C</color>
+    <color name="demo_card_background_color2">#E7C39C</color>
+    <color name="demo_card_background_color3">#E7DF9C</color>
+    <color name="demo_card_background_color4">#DEE79C</color>
+    <color name="demo_card_background_color5">#EFEBD6</color>
 </resources>
