@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="2"
+        android:id="@+id/linearLayout"
+        android:layout_marginLeft="50dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/memberline"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="false"
+            android:layout_weight="1"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/userAvatar"
+                android:src="@mipmap/ic_launcher_app"
+                android:layout_centerVertical="true" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Agilulfo"
+                android:id="@+id/memberName"
+                android:layout_marginLeft="5dp"
+                android:layout_toRightOf="@+id/userAvatar"
+                android:layout_centerVertical="true" />
+<!--
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Admin"
+                android:id="@+id/checkBox2"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="false"
+                android:layout_marginRight="10dp"
+                android:buttonTint="#683cb8" /> -->
+
+        </RelativeLayout>
+
+
+    </LinearLayout>
+</LinearLayout>

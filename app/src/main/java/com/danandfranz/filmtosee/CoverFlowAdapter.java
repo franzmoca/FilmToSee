@@ -79,7 +79,7 @@ public class CoverFlowAdapter extends BaseAdapter {
             imageLoader.init(config);
         }
         options = new DisplayImageOptions.Builder()
-                .showImageOnLoading(R.drawable.ic_launcher)
+                .showImageOnLoading(R.drawable.posterwait)
                 .cacheInMemory(true)
                 .cacheOnDisk(true)
                 .build();

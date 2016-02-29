@@ -21,9 +21,9 @@
     <item android:id="@+id/aggiungi_membro"
         android:title="Add Member"
         app:showAsAction="never"/>
-    <item android:id="@+id/silenzia_notifiche"
+   <!-- <item android:id="@+id/silenzia_notifiche"
         android:title="Silence Notifications"
-        app:showAsAction="never"/>
+        app:showAsAction="never"/>-->
     <item android:id="@+id/lascia_gruppo"
         android:title="Delete and Leave Group"
         app:showAsAction="never"/>

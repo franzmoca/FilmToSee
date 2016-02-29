@@ -200,7 +200,15 @@ public class InsideGroupActivity  extends AppCompatActivity {
 
     }
 
+    public String getMemberList(){
+        try {
+            return groupData.getString("rid");
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
 
+    }
 
     private FeatureCoverFlow.OnScrollPositionListener onScrollListener() {
         return new FeatureCoverFlow.OnScrollPositionListener() {
@@ -484,9 +492,24 @@ public class InsideGroupActivity  extends AppCompatActivity {
                     @Override
                     public void onInput(MaterialDialog dialog, CharSequence input) {
                         // Do something
-                        if (input.toString().length() > 3) {
+                       /* try {
+                            JSONArray values = groupData.getJSONArray(groupData.getString("name"));
+                            for (int i = 0; i < values.length(); i++) {
+                                JSONObject item = values.getJSONObject(i);
+                                String usernameMember = item.getString("name");
+                            }
+                            Log.d("members", "" + groupData.getJSONArray("members"));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }*/
 
-                            addMemberToGroup(getGroupRid(),input.toString());
+                        if (input.toString().length() > 3) {
+                            if (true) {
+                                //aggiungere controllo se utente già esistente
+                                  addMemberToGroup(getGroupRid(), input.toString());
+                            }
+
+
                         } else {
 
                             runOnUiThread(new Runnable() {
@@ -514,6 +537,7 @@ public class InsideGroupActivity  extends AppCompatActivity {
 
 
     private void addMemberToGroup(String groupRid, String username){
+
 
 
         RequestBody body;
@@ -648,7 +672,7 @@ public class InsideGroupActivity  extends AppCompatActivity {
                 .title("Add Film")
                 .customView(R.layout.addfilmlayout, wrapInScrollView)
                 .theme(Theme.LIGHT)
-                .positiveText("Add")
+                .positiveText("Show")
                 .negativeText("Close")
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override

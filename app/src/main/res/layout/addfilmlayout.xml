@@ -11,7 +11,10 @@
         android:layout_height="wrap_content"
         android:paddingRight="5dp"
         android:textColor="@color/black"
-        android:imeOptions="flagNoExtractUi|actionSearch"/>
+        android:theme="@style/AddFilmTextTheme"
+        android:imeOptions="flagNoExtractUi|actionSearch"
+        android:hint="Title" />
+
     <ProgressBar
         android:id="@+id/pb_loading_indicator"
         style="?android:attr/progressBarStyleSmall"

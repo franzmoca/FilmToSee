@@ -7,7 +7,7 @@
             android:id="@+id/new_group"
             android:icon="@drawable/ic_group_add_24dp"
             android:title="Create new group" />
-        <item
+       <!-- <item
             android:id="@+id/invite_friend"
             android:icon="@drawable/ic_person_add_24dp"
             android:title="Invite Friend " />
@@ -18,7 +18,7 @@
         <item
             android:id="@+id/faq"
             android:icon="@drawable/ic_help_24dp"
-            android:title="Faq" />
+            android:title="Faq" />-->
         <item
             android:id="@+id/logout"
             android:icon="@drawable/ic_exit_to_app_24dp"

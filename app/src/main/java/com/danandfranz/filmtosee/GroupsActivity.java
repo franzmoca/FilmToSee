@@ -134,6 +134,7 @@ public class GroupsActivity extends AppCompatActivity
         }
     }
 
+
     private void getCards(String username) {
 
 
@@ -284,18 +285,18 @@ public class GroupsActivity extends AppCompatActivity
 
         if (id == R.id.new_group) {
             createNewGroup();
-        } else if (id == R.id.invite_friend) {
+        } /*else if (id == R.id.invite_friend) {
 
         } else if (id == R.id.settings) {
-/*
+
             Intent intent = new Intent(this, InsideGroupActivity.class);
-            startActivity(intent);*/
+            startActivity(intent);
 
         } else if (id == R.id.faq) {
             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://normandy.dmi.unipg.it/blockchainvis/Film/faq.html"));
             startActivity(browserIntent);
 
-        } else if (id == R.id.logout) {
+        }*/ else if (id == R.id.logout) {
             session.logoutUser();
         }
 
