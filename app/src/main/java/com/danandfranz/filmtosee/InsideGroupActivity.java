@@ -62,6 +62,7 @@ public class InsideGroupActivity  extends AppCompatActivity {
     private CoverFlowAdapter coverFlowAdapter;
     private ArrayList<Film> films;
     public JSONObject groupData;
+    public JSONArray members;
     private String ridFilm;
     private String ridUser;
 
@@ -120,8 +121,9 @@ public class InsideGroupActivity  extends AppCompatActivity {
         // Enable the Up button
         ab.setDisplayHomeAsUpEnabled(true);
         try {
+            members = groupData.getJSONArray("members");
             ab.setTitle(groupData.getString("name"));
-            ab.setSubtitle(groupData.getJSONArray("members").length()+" members");
+            ab.setSubtitle(members.length()+" members");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -480,6 +482,10 @@ public class InsideGroupActivity  extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+    private boolean userExists(JSONArray jsonArray, String usernameToFind){
+        return jsonArray.toString().contains("\""+usernameToFind+"\"");
+    }
+
 
     private void addMember() {
 
@@ -491,25 +497,35 @@ public class InsideGroupActivity  extends AppCompatActivity {
                 .input("Username", "", new MaterialDialog.InputCallback() {
                     @Override
                     public void onInput(MaterialDialog dialog, CharSequence input) {
-                        // Do something
-                       /* try {
-                            JSONArray values = groupData.getJSONArray(groupData.getString("name"));
-                            for (int i = 0; i < values.length(); i++) {
-                                JSONObject item = values.getJSONObject(i);
-                                String usernameMember = item.getString("name");
-                            }
-                            Log.d("members", "" + groupData.getJSONArray("members"));
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }*/
+
+                        //Log.d(TAG, members.toString());
 
                         if (input.toString().length() > 3) {
-                            if (true) {
+                            if (!userExists(members, input.toString())) {
                                 //aggiungere controllo se utente già esistente
-                                  addMemberToGroup(getGroupRid(), input.toString());
+                                addMemberToGroup(getGroupRid(), input.toString());
+                                InputMethodManager im = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                                im.hideSoftInputFromWindow(dialog.getInputEditText().getWindowToken(), 0);
+
+                            } else {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        //Handle UI here
+                                        //findViewById(R.id.loading).setVisibility(View.GONE);
+
+                                        Snackbar.make(rootlayout, "User already in the group!", Snackbar.LENGTH_LONG)
+                                                .setAction("Close", new View.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(View v) {
+                                                        // Perform anything for the action selected
+                                                    }
+                                                }).setDuration(Snackbar.LENGTH_LONG).show();
+
+                                    }
+                                });
+
                             }
-
-
                         } else {
 
                             runOnUiThread(new Runnable() {

@@ -130,7 +130,6 @@ public class GroupsActivity extends AppCompatActivity
             getCards(name); //TODO: PROGRESS BAR
         }catch (Exception e){
             e.printStackTrace();
-            session.logoutUser();
         }
     }
 
@@ -275,8 +274,26 @@ public class GroupsActivity extends AppCompatActivity
             super.onBackPressed();
         }
     }
+    @Override
+    public void onRestart(){
+        super.onRestart();
+        Log.d(TAG,"RESTARTED");
+        HashMap<String, String> user = session.getUserDetails();
+        // name
+        String name = user.get(SessionManager.KEY_NAME);
 
+        try {
+            progressDialog = new ProgressDialog(GroupsActivity.this);
+            progressDialog.setIndeterminate(true);
+            progressDialog.setMessage("Loading...");
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+            getCards(name); //TODO: PROGRESS BAR
 
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
