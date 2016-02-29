@@ -47,7 +47,7 @@ public class LetterTileProvider {
      *
      * @param context The {@link Context} to use
      */
-    public LetterTileProvider(Context context) {
+    public LetterTileProvider(Context context,int array) {
         final Resources res = context.getResources();
 
         mPaint.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
@@ -55,7 +55,7 @@ public class LetterTileProvider {
         mPaint.setTextAlign(Paint.Align.CENTER);
         mPaint.setAntiAlias(true);
 
-        mColors = res.obtainTypedArray(R.array.letter_tile_colors);
+        mColors = res.obtainTypedArray(array);
         mTileLetterFontSize = res.getDimensionPixelSize(R.dimen.tile_letter_font_size);
 
         mDefaultBitmap = BitmapFactory.decodeResource(res, android.R.drawable.sym_def_app_icon);
@@ -115,9 +115,11 @@ public class LetterTileProvider {
         // this should guarantee the same key always maps to the same color
         final int color = Math.abs(key.hashCode()) % NUM_OF_TILE_COLORS;
         try {
-            return mColors.getColor(color, Color.BLACK);
+            int colorChosen = mColors.getColor(color, Color.BLACK);
+            return colorChosen;
         } finally {
-           //mColors.recycle();
+
+
         }
     }
 

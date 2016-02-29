@@ -129,14 +129,6 @@ public class OneFragment extends Fragment{
         addTitle = (TextView) InputFragmentView.findViewById(R.id.add_title);
         addYear = (TextView) InputFragmentView.findViewById(R.id.add_year);
         poster = (ImageView) InputFragmentView.findViewById(R.id.poster);
-
-
-        //// TODO
-        //prendere numero like e unlike e settarli
-        //quando faccio like o unlike chiamata post
-        //aggiorno
-
-
         return InputFragmentView;
     }
 

@@ -202,16 +202,6 @@ public class InsideGroupActivity  extends AppCompatActivity {
 
     }
 
-    public String getMemberList(){
-        try {
-            return groupData.getString("rid");
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return null;
-        }
-
-    }
-
     private FeatureCoverFlow.OnScrollPositionListener onScrollListener() {
         return new FeatureCoverFlow.OnScrollPositionListener() {
             @Override

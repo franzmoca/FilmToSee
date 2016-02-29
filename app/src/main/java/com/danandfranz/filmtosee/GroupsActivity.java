@@ -79,7 +79,7 @@ public class GroupsActivity extends AppCompatActivity
          * logged in
          * */
         session.checkLogin();
-        tileProvider = new LetterTileProvider(this);
+        tileProvider = new LetterTileProvider(this,R.array.letter_tile_colors);
         // get user data from session
         HashMap<String, String> user = session.getUserDetails();
 
@@ -127,7 +127,7 @@ public class GroupsActivity extends AppCompatActivity
             progressDialog.setMessage("Loading...");
             progressDialog.setCancelable(false);
             progressDialog.show();
-            getCards(name); //TODO: PROGRESS BAR
+            getCards(name);
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -288,7 +288,7 @@ public class GroupsActivity extends AppCompatActivity
             progressDialog.setMessage("Loading...");
             progressDialog.setCancelable(false);
             progressDialog.show();
-            getCards(name); //TODO: PROGRESS BAR
+            getCards(name);
 
         }catch (Exception e){
             e.printStackTrace();
