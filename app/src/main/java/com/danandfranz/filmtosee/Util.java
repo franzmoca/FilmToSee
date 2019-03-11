@@ -23,7 +23,7 @@ public class Util {
 
     static Call post(RequestBody body,OkHttpClient client, Callback callback) throws IOException {
         Request request = new Request.Builder()
-                .url("http://normandy.dmi.unipg.it/blockchainvis/Film/orient.php")
+                .url("http:45.62.227.173/home/agilulfo/Film/orient.php")
                 .post(body)
                 .build();
         Call call = client.newCall(request);
